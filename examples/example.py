@@ -1,0 +1,115 @@
+from betconnect.apiclient import APIClient
+from betconnect import resources
+from decouple import config
+from betconnect.enums import Envirnoment
+
+SPORT_ID = 14
+FIXTURE_ID = 8587914
+MARKET_TYPE_ID = 6
+BET_REQUEST_ID = '305de7a2-81eb-40a8-bd9d-72272d9d0b91'
+
+client = APIClient(username=config("BETCONNECT_USERNAME"),
+                   password=config("BETCONNECT_PASSWORD"),
+                   api_key=config("BETCONNECT_API_KEY"),
+                   environment=Envirnoment.STAGING)
+
+lay_client = APIClient(username=config("BETCONNECT_LAY_USERNAME"),
+                   password=config("BETCONNECT_LAY_PASSWORD"),
+                   api_key=config("BETCONNECT_LAY_API_KEY"),
+                   environment=Envirnoment.STAGING)
+
+# Login
+client.login.login()
+
+
+fixture_selection_prices = client.betting.selections_for_market(FIXTURE_ID,MARKET_TYPE_ID, False)
+
+lay_client.login.login()
+
+
+request = client.betting.bet_request_create(resources.CreateBetRequestFilter(
+    fixture_id = FIXTURE_ID,
+    market_type_id = MARKET_TYPE_ID,
+    competitor = fixture_selection_prices[0].competitor_id,
+    price =fixture_selection_prices[0].max_price,
+    stake = 50,
+    bet_type='WIN'
+))
+
+# Get active sports
+active_sports = client.betting.active_sports()
+
+active_requests = client.betting.get_active_bet_requests()
+
+
+back_bet_request = client.betting.bet_request_get(filter=resources.GetBetRequestFilter(
+    bet_request_id=request.bet_request_id
+))
+
+lay_back_bet_request = lay_client.betting.bet_request_get(filter=resources.GetBetRequestFilter(
+    bet_request_id=request.bet_request_id
+))
+
+#lay_match_request = lay_client.betting.bet_request_match(
+#    bet_request_id=request.bet_request_id,
+#    accepted_stake = 10
+#)
+
+lay_match_request = lay_client.betting.bet_request_match_more(
+    bet_request_id=request.bet_request_id,
+    requested_stake = 10.0
+)
+
+
+request = client.betting.bet_request_create(resources.CreateBetRequestFilter(
+    fixture_id = FIXTURE_ID,
+    market_type_id = MARKET_TYPE_ID,
+    competitor = fixture_selection_prices[0].competitor_id,
+    price =fixture_selection_prices[0].max_price,
+    stake = 10,
+    bet_type='WIN'
+))
+
+back_bet_request = client.betting.bet_request_get(filter=resources.GetBetRequestFilter(
+    sport_id=SPORT_ID,
+    bet_request_id=request.bet_request_id
+))
+
+lay_back_bet_request = lay_client.betting.bet_request_get(filter=resources.GetBetRequestFilter(
+    sport_id=SPORT_ID,
+    bet_request_id=request.bet_request_id
+))
+
+lay_request = lay_client.betting.bet_request_match(
+    bet_request_id=request.bet_request_id,
+    accepted_stake = 10
+)
+
+
+
+horse_racing = [s for s in active_sports if s.display_name == 'Horse Racing'][0]
+
+# active regions
+active_regions = client.betting.active_regions(sport_id=horse_racing.sport_id)
+
+england = [r for r in active_regions if r.name == 'England'][0]
+ireland = [r for r in active_regions if r.name == 'Ireland'][0]
+
+# active market types
+active_market_types = client.betting.active_market_types(
+    sport_id=horse_racing.sport_id
+)
+
+win_type = [t for t in active_market_types if t.name == 'WIN'][0]
+
+# get active competitions
+active_competitions = client.betting.active_competitions(
+    region_id=england,
+    sport_id=horse_racing.sport_id
+)
+
+# All active fixtures with selections and prices (can be slow to request this way)
+active_fixtures = client.betting.get_fixtures_with_active_selections(
+    sport_id=horse_racing.sport_id,
+    market_type_id=win_type.market_type_id
+)
