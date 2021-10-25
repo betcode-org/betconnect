@@ -292,15 +292,13 @@ class Betting(BaseEndpoint):
 
         (response, response_json, elapsed_time) = self.patch(method_uri=method_uri, data={
             "bet_request_id": bet_request_id,
-            "requested_stake": requested_stake
+            "requested_stake": int(requested_stake)
         })
 
-        save_data_to_pickle_file('bet_request_match_more_response.pkl', response)
-        save_json_to_file('bet_request_match_more_response.json', response_json)
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.BetRequestMatch,
+            resource=resources.BetRequestMatchMore,
             elapsed_time=elapsed_time
         )
 
@@ -310,6 +308,8 @@ class Betting(BaseEndpoint):
 
         (response, response_json, elapsed_time) = self.request(method_uri=method_uri, params={})
 
+        save_data_to_pickle_file('bet_request_reject_response.pkl', response)
+        save_json_to_file('bet_request_reject_response.json', response_json)
         return self.process_response(
             response=response,
             response_json=response_json,
@@ -321,14 +321,16 @@ class Betting(BaseEndpoint):
                          bet_request_id: str,
                          stop_bet_reason: str = None
                          ):
-        data = {
-            'bet_request_id': bet_request_id,
-            'stop_bet_reason': stop_bet_reason
-        }
+
         method_uri = self._METHOD_URIS['bet_request_stop']
 
-        (response, response_json, elapsed_time) = self.post(method_uri=method_uri, params={})
+        (response, response_json, elapsed_time) = self.post(method_uri=method_uri, data= {
+            'bet_request_id': bet_request_id,
+            'stop_bet_reason': stop_bet_reason
+        })
 
+        save_data_to_pickle_file('bet_request_reject_response.pkl', response)
+        save_json_to_file('bet_request_reject_response.json', response_json)
         return self.process_response(
             response=response,
             response_json=response_json,

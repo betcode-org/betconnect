@@ -116,7 +116,7 @@ class BaseEndpoint:
             self.client.login()
 
         try:
-            response = self.session.patch(uri, timeout=self._read_timeout, data=data)
+            response = self.session.patch(uri, timeout=self._read_timeout, json=data)
         except requests.ConnectionError as e:
             raise APIError(None, uri, data, e)
         except Exception as e:

@@ -323,3 +323,12 @@ class SelectionsForMarket(BaseResource):
             return v
         else:
             raise TypeError(f"Expected value of type str or datetime")
+
+class Viewed(BaseResource):
+    prev: str
+    next: str
+
+class BetRequestMatchMore(BaseResource):
+    matched: bool
+    available: bool
+    viewed: Viewed

@@ -16,7 +16,9 @@ from .betting import (
     BetHistoryRequest,
     SelectionsForMarket,
     ActiveBets,
-    ActiveBetsRequest
+    ActiveBetsRequest,
+    Viewed,
+    BetRequestMatchMore
 )
 from .filters import (
     GetBetRequestFilter,
