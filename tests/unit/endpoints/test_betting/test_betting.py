@@ -156,15 +156,14 @@ class TestBetting:
             assert isinstance(p, resources.Price)
         request.assert_called()
 
-    def test_bet_request_get(self, mocker,staging_lay_api_client, mock_betting_endpoint: Betting, mock_bet_request_create_response: Tuple[
+    def test_bet_request_get(self, mocker,staging_lay_api_client, mock_betting_endpoint: Betting, mock_bet_request_get_response: Tuple[
         Response, Dict[str, Any], float]):
-        #request = mocker.patch('betconnect.endpoints.baseendpoint.BaseEndpoint.post',
-        #                       return_value=mock_bet_request_create_response)
-        mock_betting_endpoint.client = staging_lay_api_client
+        request = mocker.patch('betconnect.endpoints.baseendpoint.BaseEndpoint.post',
+                               return_value=mock_bet_request_get_response)
         bet_request = mock_betting_endpoint.bet_request_get(
             filter=resources.GetBetRequestFilter(
                 sport_id=14,
-                bet_request_id='d05215ce-d46f-40fd-8fc6-232dedcfdce4'#'712d7387-c059-4d58-be66-12eccdeed384'
+                bet_request_id='712d7387-c059-4d58-be66-12eccdeed384'
             )
         )
         assert isinstance(bet_request, resources.BetRequest)
@@ -187,13 +186,13 @@ class TestBetting:
         assert isinstance(bet_request, resources.BetRequestCreate)
         request.assert_called()
 
-    def test_bet_request_match(self, mocker,staging_lay_api_client, mock_betting_endpoint: Betting, mock_bet_request_match__response: Tuple[
-        Response, Dict[str, Any], float]):
-        #request = mocker.patch('betconnect.endpoints.baseendpoint.BaseEndpoint.patch',
-        #                       return_value=mock_bet_request_match__response)
+    def test_bet_request_match(self, mocker, staging_lay_api_client, mock_betting_endpoint: Betting,
+                               mock_bet_request_match_response):
+        request = mocker.patch('betconnect.endpoints.baseendpoint.BaseEndpoint.patch',
+                               return_value=mock_bet_request_match_response)
         mock_betting_endpoint.client = staging_lay_api_client
         bet_request_match = mock_betting_endpoint.bet_request_match(
-            bet_request_id='d05215ce-d46f-40fd-8fc6-232dedcfdce4',#'712d7387-c059-4d58-be66-12eccdeed384',
+            bet_request_id='d05215ce-d46f-40fd-8fc6-232dedcfdce4',
             accepted_stake=10
 
         )
@@ -213,3 +212,13 @@ class TestBetting:
     def test_bet_request_reject(self, mock_betting_endpoint, staging_lay_api_client):
         bet_request = mock_betting_endpoint.bet_request_reject()
         assert isinstance(bet_request, resources.BetRequestCreate)
+
+    def test_bet_request_stop(self, mocker, mock_betting_endpoint: Betting, mock_bet_request_stop_response: Tuple[
+        Response, Dict[str, Any], float]):
+        request = mocker.patch('betconnect.endpoints.baseendpoint.BaseEndpoint.post',
+                               return_value=mock_bet_request_stop_response)
+        bet_request_stop = mock_betting_endpoint.bet_request_stop(
+            bet_request_id='d05215ce-d46f-40fd-8fc6-232dedcfdce4'
+        )
+        assert isinstance(bet_request_stop, resources.ResponseMessage)
+        request.assert_called()

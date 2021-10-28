@@ -211,6 +211,7 @@ class Betting(BaseEndpoint):
             method_uri=method_uri,
             data=filter.dict(exclude_none=True)
         )
+
         return self.process_response(
             response=response,
             response_json=response_json,
@@ -319,7 +320,7 @@ class Betting(BaseEndpoint):
 
     def bet_request_stop(self,
                          bet_request_id: str,
-                         stop_bet_reason: str = None
+                         stop_bet_reason: str = ''
                          ):
 
         method_uri = self._METHOD_URIS['bet_request_stop']
@@ -329,12 +330,12 @@ class Betting(BaseEndpoint):
             'stop_bet_reason': stop_bet_reason
         })
 
-        save_data_to_pickle_file('bet_request_reject_response.pkl', response)
-        save_json_to_file('bet_request_reject_response.json', response_json)
+        #save_data_to_pickle_file('bet_request_stop_response.pkl', response)
+        #save_json_to_file('bet_request_stop_response.json', response_json)
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.ActiveSelections,
+            resource=resources.ResponseMessage,
             elapsed_time=elapsed_time
         )
 

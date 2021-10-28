@@ -24,6 +24,7 @@ class Login(BaseEndpoint):
         (response, response_json, elapsed_time) = self.post(method_uri=method_uri)
 
         data = response_json.get('data')
+
         if data:
             if 'token' in data:
                 self.client.process_login(data['token'])

@@ -248,7 +248,7 @@ class BetHistory(BaseResource):
     price: float
     price_denominator: int
     price_numerator: int
-    region_iso: str
+    region_iso: str = Field(default=None)
     region_name: str
     selection_name: str
     sport_name: str

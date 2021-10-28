@@ -4,7 +4,7 @@ from decouple import config
 from betconnect.enums import Envirnoment
 
 SPORT_ID = 14
-FIXTURE_ID = 8595465
+FIXTURE_ID = 8609469
 MARKET_TYPE_ID = 6
 BET_REQUEST_ID = '305de7a2-81eb-40a8-bd9d-72272d9d0b91'
 
@@ -19,27 +19,43 @@ lay_client = APIClient(username=config("BETCONNECT_LAY_USERNAME"),
                    environment=Envirnoment.STAGING)
 
 # Login
-client.login.login()
+login = client.login.login()
+
+#client.betting.bet_request_stop(bet_request_id='8ea9d691-aa9e-4403-a482-50ebc5626705')
 
 
-fixture_selection_prices = client.betting.selections_for_market(FIXTURE_ID,MARKET_TYPE_ID, False)
+types = client.betting.active_market_types(14)
+
+fixtures = client.betting.active_fixtures(sport_id=SPORT_ID)
+
+active_fixture = fixtures[-1]
+
+fixture_selection_prices = client.betting.selections_for_market(active_fixture.fixture_id,MARKET_TYPE_ID, False)
+
+fixture_selection = fixture_selection_prices[0]
 
 lay_client.login.login()
 
 
 request = client.betting.bet_request_create(resources.CreateBetRequestFilter(
-    fixture_id = FIXTURE_ID,
+    fixture_id = active_fixture.fixture_id,
     market_type_id = MARKET_TYPE_ID,
-    competitor = fixture_selection_prices[0].competitor_id,
-    price =fixture_selection_prices[0].max_price,
+    competitor = fixture_selection.competitor_id,
+    price =fixture_selection.prices[0].price,
     stake = 5,
-    bet_type='WIN'
+    bet_type='Win'
 ))
 
 
-client.login.login()
+import time
+hist_before = client.betting.bet_history(username=client._username, status='Settled')
+active_bets_before = client.betting.get_active_bet_requests()
+time.sleep(5)
+stop = client.betting.bet_request_stop(bet_request_id=request.bet_request_id)
+hist_after = client.betting.bet_history(username=client._username, status='Settled')
+active_bets_after = client.betting.get_active_bet_requests()
 
-client.betting.bet_request_stop(bet_request_id=request.bet_request_id)
+
 
 active_bets = client.betting.get_active_bet_requests()
 active_bets_2 = client.betting.get_active_bet_requests()

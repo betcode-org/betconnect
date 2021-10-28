@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Union, List,Type
+from typing import TYPE_CHECKING, Union, List, Type
 from datetime import datetime, timedelta
 from betconnect.resources.baseresource import BaseResource
 import requests
@@ -7,6 +7,7 @@ import json
 import logging
 import time
 from requests import Response
+from betconnect import resources
 from betconnect.exceptions import APIError
 
 logger = logging.getLogger(__name__)
@@ -127,13 +128,14 @@ class BaseEndpoint:
 
         return response, response_json, elapsed_time
 
-    def _process_request_exception(self, response: requests.Response):
-        if response.status_code == 400:
-            logger.exception("Issue with request parameters, {}".format(self._load_content(response)))
-        elif response.status_code == 404:
-            logger.exception("Issue with request URI, {}".format(self._load_content(response)))
-        else:
-            logger.exception("Unknown issue, {}".format(self._load_content(response)))
+    def _process_request_exception(self, response: requests.Response,
+                                   response_json: dict) -> resources.BaseRequestException:
+        logger.exception(f"Issue with request for: {response.url}, message: {response_json.get('message')}")
+        return resources.BaseRequestException(
+            message = response_json.get('message'),
+            request_url = response.url,
+            status_code = response.status_code
+        )
 
     def _load_content(self, response: requests.Response):
         if response.headers['content-type'] in ['application/json', 'application/json; charset=utf-8']:
@@ -161,11 +163,13 @@ class BaseEndpoint:
                     return [resource(**r) for r in data]
                 else:
                     raise Exception('unkown response data type')
+            elif 'message' in response_json:
+                return resources.ResponseMessage(message=response_json.get('message'), status_code=response.status_code, request_url=response.url)
             else:
                 raise Exception('Expected response json to contain data key')
 
         else:
-            self._process_request_exception(response)
+            return self._process_request_exception(response, response_json)
 
     def _check_status_code(self, response: Response, codes: List[int] = []):
         """

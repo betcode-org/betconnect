@@ -324,7 +324,7 @@ def mock_bet_request_get_json() -> Dict[str, Any]:
 
 
 @pytest.fixture()
-def mock_bet_request_create_response(mock_bet_request_get_pkl: Response,
+def mock_bet_request_get_response(mock_bet_request_get_pkl: Response,
                                  mock_bet_request_get_json: Dict[str, Any]) -> Tuple[
     Response, Dict[str, Any], float]:
     return mock_bet_request_get_pkl, mock_bet_request_get_json, 1.0
@@ -340,7 +340,23 @@ def mock_bet_request_match_json() -> Dict[str, Any]:
 
 
 @pytest.fixture()
-def mock_bet_request_match__response(mock_bet_request_match_pkl: Response,
-                                 mock_bet_request_match_json: Dict[str, Any]) -> Tuple[
+def mock_bet_request_match_response(mock_bet_request_match_pkl: Response,
+                                    mock_bet_request_match_json: Dict[str, Any]) -> Tuple[
     Response, Dict[str, Any], float]:
     return mock_bet_request_match_pkl, mock_bet_request_match_json, 1.0
+
+@pytest.fixture()
+def mock_bet_request_stop_pkl() -> Response:
+    return load_pickle(build_path('resources/endpoints/betting/bet_request_stop_response.pkl'))
+
+
+@pytest.fixture()
+def mock_bet_request_stop_json() -> Dict[str, Any]:
+    return load_json(build_path('resources/endpoints/betting/bet_request_stop_response.json'))
+
+
+@pytest.fixture()
+def mock_bet_request_stop_response(mock_bet_request_stop_pkl: Response,
+                                 mock_bet_request_stop_json: Dict[str, Any]) -> Tuple[
+    Response, Dict[str, Any], float]:
+    return mock_bet_request_stop_pkl, mock_bet_request_stop_json, 1.0
