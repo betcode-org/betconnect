@@ -186,8 +186,9 @@ class TestBetting:
         assert isinstance(bet_request, resources.BetRequestCreate)
         request.assert_called()
 
-    def test_bet_request_match(self, mocker, staging_lay_api_client, mock_betting_endpoint: Betting,
-                               mock_bet_request_match_response):
+    def test_bet_request_match(self, mocker, staging_lay_api_client: APIClient, mock_betting_endpoint: Betting,
+                               mock_bet_request_match_response: Tuple[
+        Response, Dict[str, Any], float]):
         request = mocker.patch('betconnect.endpoints.baseendpoint.BaseEndpoint.patch',
                                return_value=mock_bet_request_match_response)
         mock_betting_endpoint.client = staging_lay_api_client
@@ -199,7 +200,7 @@ class TestBetting:
         assert isinstance(bet_request_match, resources.BetRequestMatch)
         request.assert_called()
 
-    def test_bet_request_match_more(self, mock_betting_endpoint, staging_lay_api_client):
+    def test_bet_request_match_more(self, mock_betting_endpoint, staging_lay_api_client, mock_bet_request_match_more_response):
         #raise Exception('TODO / ASk about how this works')
         mock_betting_endpoint.client = staging_lay_api_client
         bet_request = mock_betting_endpoint.bet_request_match_more(

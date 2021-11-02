@@ -360,3 +360,21 @@ def mock_bet_request_stop_response(mock_bet_request_stop_pkl: Response,
                                  mock_bet_request_stop_json: Dict[str, Any]) -> Tuple[
     Response, Dict[str, Any], float]:
     return mock_bet_request_stop_pkl, mock_bet_request_stop_json, 1.0
+
+
+
+@pytest.fixture()
+def mock_bet_request_match_more_pkl() -> Response:
+    return load_pickle(build_path('resources/endpoints/betting/bet_request_match_more_response.pkl'))
+
+
+@pytest.fixture()
+def mock_bet_request_match_more_json() -> Dict[str, Any]:
+    return load_json(build_path('resources/endpoints/betting/bet_request_match_more_response.json'))
+
+
+@pytest.fixture()
+def mock_bet_request_match_more_response(mock_bet_request_match_more_pkl: Response,
+                                    mock_bet_request_match_more_json: Dict[str, Any]) -> Tuple[
+    Response, Dict[str, Any], float]:
+    return mock_bet_request_match_more_pkl, mock_bet_request_match_more_json, 1.0

@@ -342,7 +342,7 @@ class Betting(BaseEndpoint):
     def get_active_bet_requests(self,
                                 limit: int = None,
                                 page: int = None
-                                )->List[resources.ActiveBets]:
+                                )->resources.ActiveBetsRequest:
         if limit and page:
             method_uri = self._METHOD_URIS['get_active_bet_requests_limit_page'].format(limit, page)
         else:

@@ -8,6 +8,12 @@ FIXTURE_ID = 8609469
 MARKET_TYPE_ID = 6
 BET_REQUEST_ID = '305de7a2-81eb-40a8-bd9d-72272d9d0b91'
 
+def stop_active_bets(client: APIClient):
+    active_bets = client.betting.get_active_bet_requests()
+    for active_bet in active_bets.bets: # type: resources.ActiveBets
+        if active_bet.status_name == 'Active':
+            client.betting.bet_request_stop(bet_request_id=active_bet.bet_request_id)
+
 client = APIClient(username=config("BETCONNECT_USERNAME"),
                    password=config("BETCONNECT_PASSWORD"),
                    api_key=config("BETCONNECT_API_KEY"),
@@ -20,6 +26,8 @@ lay_client = APIClient(username=config("BETCONNECT_LAY_USERNAME"),
 
 # Login
 login = client.login.login()
+
+stop_active_bets(client)
 
 #client.betting.bet_request_stop(bet_request_id='8ea9d691-aa9e-4403-a482-50ebc5626705')
 
@@ -42,9 +50,19 @@ request = client.betting.bet_request_create(resources.CreateBetRequestFilter(
     market_type_id = MARKET_TYPE_ID,
     competitor = fixture_selection.competitor_id,
     price =fixture_selection.prices[0].price,
-    stake = 5,
+    stake = 1000,
     bet_type='Win'
 ))
+import time
+time.sleep(5)
+
+lay_get = lay_client.betting.bet_request_get(filter=resources.GetBetRequestFilter(
+bet_request_id= request.bet_request_id
+))
+lay_match_request = lay_client.betting.bet_request_match_more(
+    bet_request_id=request.bet_request_id,
+    requested_stake = int(500)
+)
 
 
 import time
@@ -82,10 +100,7 @@ lay_back_bet_request = lay_client.betting.bet_request_get(filter=resources.GetBe
 
 
 
-lay_match_request = lay_client.betting.bet_request_match_more(
-    bet_request_id=request.bet_request_id,
-    requested_stake = int(lay_back_bet_request.requested_stake)
-)
+
 
 active_requests = client.betting.get_active_bet_requests()
 
