@@ -1,3 +1,5 @@
 pydantic
 requests
 python-decouple
+pytest
+pytest-mock

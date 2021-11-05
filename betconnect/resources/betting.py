@@ -109,17 +109,6 @@ class ActiveSelections(BaseResource):
     selection_id: int
     ut: str
     competitor: str
-    prices: List[Price] = Field(default=[])
-
-    def _add_price(self, price: Price):
-        if price not in self.prices:
-            self.prices.append(price)
-
-    def add_prices(self, prices: Union[Price, List[Price]]) -> None:
-        if isinstance(prices, Price):
-            self._add_price(price=prices)
-        elif isinstance(prices, list):
-            [self._add_price(p) for p in prices if isinstance(p, Price)]
 
     def __eq__(self, other) -> bool:
         if isinstance(other, ActiveSelections):

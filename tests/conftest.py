@@ -378,3 +378,55 @@ def mock_bet_request_match_more_response(mock_bet_request_match_more_pkl: Respon
                                     mock_bet_request_match_more_json: Dict[str, Any]) -> Tuple[
     Response, Dict[str, Any], float]:
     return mock_bet_request_match_more_pkl, mock_bet_request_match_more_json, 1.0
+
+@pytest.fixture()
+def mock_get_active_bet_requests_pkl() -> Response:
+    return load_pickle(build_path('resources/endpoints/betting/get_active_bet_requests_response.pkl'))
+
+
+@pytest.fixture()
+def mock_get_active_bet_requests_json() -> Dict[str, Any]:
+    return load_json(build_path('resources/endpoints/betting/get_active_bet_requests_response.json'))
+
+
+@pytest.fixture()
+def mock_bet_get_active_bet_requests_response(mock_get_active_bet_requests_pkl: Response,
+                                    mock_get_active_bet_requests_json: Dict[str, Any]) -> Tuple[
+    Response, Dict[str, Any], float]:
+    return mock_get_active_bet_requests_pkl, mock_get_active_bet_requests_json, 1.0
+
+@pytest.fixture()
+def mock_get_viewed_next_page_pkl() -> Response:
+    return load_pickle(build_path('resources/endpoints/betting/get_viewed_next_page_response.pkl'))
+
+
+@pytest.fixture()
+def mock_get_viewed_next_page_json() -> Dict[str, Any]:
+    return load_json(build_path('resources/endpoints/betting/get_viewed_next_page_response.json'))
+
+
+@pytest.fixture()
+def mock_get_viewed_next_page_response(mock_get_viewed_next_page_pkl: Response,
+                                    mock_get_viewed_next_page_json: Dict[str, Any]) -> Tuple[
+    Response, Dict[str, Any], float]:
+    return mock_get_viewed_next_page_pkl, mock_get_viewed_next_page_json, 1.0
+
+
+@pytest.fixture()
+def mock_status_pkl() -> Response:
+    return load_pickle(build_path('resources/endpoints/login/mock_status.pkl'))
+
+
+@pytest.fixture()
+def mock_status_json() -> Dict[str, Any]:
+    return load_json(build_path('resources/endpoints/login/mock_status.json'))
+
+
+@pytest.fixture()
+def mock_status_response(mock_status_pkl: Response,
+                                    mock_status_json: Dict[str, Any]) -> Tuple[
+    Response, Dict[str, Any], float]:
+    return mock_status_pkl, mock_status_json, 1.0
+
+
+

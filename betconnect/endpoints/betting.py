@@ -42,9 +42,11 @@ class Betting(BaseEndpoint):
         'selections_for_market_top_price': 'api/v2/selections_for_market/{}/{}/{}'
     }
 
+    # save_data_to_pickle_file('bet_request_stop_response.pkl', response)
+    # save_json_to_file('bet_request_stop_response.json', response_json)
     def active_bookmakers(self) -> List[resources.ActiveBookmakers]:
         """
-        Returns an list of active sports
+        Returns a list of active sports
         :return: List of ActiveBookmakers
         """
 
@@ -60,6 +62,11 @@ class Betting(BaseEndpoint):
         )
 
     def active_sports(self, with_bets: bool = None) -> List[resources.ActiveSports]:
+        """
+        Gets a list of active sports
+        :param with_bets: boolean value (True, False)
+        :return: List of active sports
+        """
         if with_bets:
             method_uri = self._METHOD_URIS['active_sports_with_bets']
         else:
@@ -76,6 +83,11 @@ class Betting(BaseEndpoint):
 
     def active_regions(self,
                        sport_id: int) -> List[resources.ActiveRegion]:
+        """
+        Gets the active regions for a sport
+        :param sport_id: The sport ID
+        :return: List of active regions
+        """
 
         method_uri = self._METHOD_URIS['active_regions'].format(sport_id)
 
@@ -92,6 +104,12 @@ class Betting(BaseEndpoint):
                             sport_id: int,
                             region_id: int
                             ) -> List[resources.ActiveCompetitions]:
+        """
+        Returns a list of active competitions for a given sport id and region id
+        :param sport_id: The sport ID
+        @:param region_id: The region ID
+        :return: List of ActiveBookmakers
+        """
 
         method_uri = self._METHOD_URIS['active_competitions'].format(sport_id, region_id)
 
@@ -109,6 +127,13 @@ class Betting(BaseEndpoint):
                         region_id: int = None,
                         competition_id: int = None
                         ) -> List[resources.ActiveFixtures]:
+        """
+        Gets active fixtures for a sport, region and competition
+        :param sport_id: The sport ID
+        :param region_id: The region ID
+        :param competition_id: The competition ID
+        :return: List of active fixtures
+        """
 
         if competition_id:
             method_uri = self._METHOD_URIS['active_fixtures_region_competition'].format(sport_id, region_id,
@@ -128,6 +153,11 @@ class Betting(BaseEndpoint):
         )
 
     def active_market_types(self, sport_id: int) -> List[resources.ActiveMarketTypes]:
+        """
+        Gets the active market type for a sport
+        :param sport_id: The sport ID
+        :return: List of active market types
+        """
         method_uri = self._METHOD_URIS['active_market_types'].format(sport_id)
 
         (response, response_json, elapsed_time) = self.request(method_uri=method_uri, params={})
@@ -140,6 +170,12 @@ class Betting(BaseEndpoint):
         )
 
     def active_markets(self, fixture_id: int, grouped: bool = None) -> List[resources.ActiveMarkets]:
+        """
+        Gets a list of active markets for the fixture
+        :param fixture_id: The fixture ID
+        :param grouped: boolean value to determine whether the response should be grouped
+        :return: List of active markets
+        """
         if grouped:
             method_uri = self._METHOD_URIS['active_markets_grouped'].format(fixture_id)
         else:
@@ -156,6 +192,13 @@ class Betting(BaseEndpoint):
 
     def active_selections(self, fixture_id: int, market_type_id: int, handicap: bool = None) -> List[
         resources.ActiveSelections]:
+        """
+        Gets active selections for a given fixture and market type
+        :param fixture_id: The fixture ID
+        :param market_type_id: The market type ID
+        :param handicap: boolean handicap value (True, False)
+        :return: List of active selections
+        """
         if handicap:
             method_uri = self._METHOD_URIS['active_selections_handicap'].format(fixture_id, market_type_id, handicap)
         else:
@@ -203,7 +246,12 @@ class Betting(BaseEndpoint):
 
     def bet_request_create(self,
                            filter: resources.CreateBetRequestFilter
-                           ) -> resources.BetRequestCreate:
+                           ) -> Union[resources.BaseRequestException, resources.BetRequestCreate]:
+        """
+        Creates a bet (Authenticated)
+        :param filter: The bet create filter
+        :return: a successful bet create response or an exception
+        """
 
         method_uri = self._METHOD_URIS['bet_request_create']
 
@@ -221,21 +269,25 @@ class Betting(BaseEndpoint):
 
     def bet_request_get(self,
                         filter: resources.GetBetRequestFilter
-                        ) -> resources.BetRequest:
+                        ) -> Union[resources.BaseRequestException, resources.BetRequest]:
+        """
+        Gets a bet request for the given filter
+        :param filter: A bet request filter, either enter a bet request id or other filter values
+        :return: A bet request resource or a request exception resource
+        """
 
         method_uri = self._METHOD_URIS['bet_request_get']
 
         if filter.bet_request_id:
             (response, response_json, elapsed_time) = self.post(
                 method_uri=method_uri,
-                data=filter.dict(exclude={'sport_id','bookmakers','min_odds','max_odds','accept_each_way'})
+                data=filter.dict(exclude={'sport_id', 'bookmakers', 'min_odds', 'max_odds', 'accept_each_way'})
             )
         else:
             (response, response_json, elapsed_time) = self.post(
                 method_uri=method_uri,
                 data=filter.dict(exclude={'bet_request_id'})
             )
-
 
         return self.process_response(
             response=response,
@@ -268,7 +320,13 @@ class Betting(BaseEndpoint):
     def bet_request_match(self,
                           bet_request_id: str,
                           accepted_stake: int
-                          ) -> resources.BetRequestMatch:
+                          ) -> Union[resources.BaseRequestException, resources.BetRequestMatch]:
+        """
+        A request to match for part or all of an active bet request.
+        :param bet_request_id: The bet request ID
+        :param accepted_stake: the target stake you would like to match
+        :return: A bet request match resource or a request exception resource
+        """
 
         method_uri = self._METHOD_URIS['bet_request_match'].format(accepted_stake)
 
@@ -287,7 +345,13 @@ class Betting(BaseEndpoint):
     def bet_request_match_more(self,
                                bet_request_id: str,
                                requested_stake: float
-                               ):
+                               ) -> Union[resources.BetRequestMatchMore, resources.BaseRequestException]:
+        """
+        Allows you to match a bet request fully (up to the maximum liability allowed for a single bet) and request more of that bet until no liability is left.
+        :param bet_request_id: The bet request ID
+        :param requested_stake: The requested stake
+        :return: A bet request match more resource or a request exception resource
+        """
 
         method_uri = self._METHOD_URIS['bet_request_match_more']
 
@@ -303,35 +367,24 @@ class Betting(BaseEndpoint):
             elapsed_time=elapsed_time
         )
 
-    def bet_request_reject(self):
-
-        method_uri = self._METHOD_URIS['bet_request_reject']
-
-        (response, response_json, elapsed_time) = self.request(method_uri=method_uri, params={})
-
-        save_data_to_pickle_file('bet_request_reject_response.pkl', response)
-        save_json_to_file('bet_request_reject_response.json', response_json)
-        return self.process_response(
-            response=response,
-            response_json=response_json,
-            resource=resources.ActiveSelections,
-            elapsed_time=elapsed_time
-        )
-
     def bet_request_stop(self,
                          bet_request_id: str,
                          stop_bet_reason: str = ''
-                         ):
+                         ) -> resources.ResponseMessage:
+        """
+        Stops an active bet bet request
+        :param bet_request_id: The bet request ID
+        :param stop_bet_reason: optional reason
+        :return: A bet request stop response message
+        """
 
         method_uri = self._METHOD_URIS['bet_request_stop']
 
-        (response, response_json, elapsed_time) = self.post(method_uri=method_uri, data= {
+        (response, response_json, elapsed_time) = self.post(method_uri=method_uri, data={
             'bet_request_id': bet_request_id,
             'stop_bet_reason': stop_bet_reason
         })
 
-        #save_data_to_pickle_file('bet_request_stop_response.pkl', response)
-        #save_json_to_file('bet_request_stop_response.json', response_json)
         return self.process_response(
             response=response,
             response_json=response_json,
@@ -342,13 +395,19 @@ class Betting(BaseEndpoint):
     def get_active_bet_requests(self,
                                 limit: int = None,
                                 page: int = None
-                                )->resources.ActiveBetsRequest:
+                                ) -> Union[resources.ActiveBetsRequest, resources.BaseRequestException]:
+        """
+        Gets active bet requests, taking into account pagination
+        :param limit: Limit the number of active bets returned
+        :param page: The page starting number
+        :return: An active bet request resource or request exception resource
+        """
         if limit and page:
             method_uri = self._METHOD_URIS['get_active_bet_requests_limit_page'].format(limit, page)
         else:
             method_uri = self._METHOD_URIS['get_active_bet_requests']
 
-        (response, response_json, elapsed_time) = self.request(method_uri=method_uri, params={},authenticated=True)
+        (response, response_json, elapsed_time) = self.request(method_uri=method_uri, params={}, authenticated=True)
 
         return self.process_response(
             response=response,
@@ -356,7 +415,6 @@ class Betting(BaseEndpoint):
             resource=resources.ActiveBetsRequest,
             elapsed_time=elapsed_time
         )
-
 
     def my_bets(self,
                 side: str,
@@ -372,7 +430,8 @@ class Betting(BaseEndpoint):
             method_uri = self._METHOD_URIS['my_bets'].format(side, user_id, status)
 
         (response, response_json, elapsed_time) = self.post(method_uri=method_uri, params={})
-
+        save_data_to_pickle_file('get_active_bet_requests_response.pkl', response)
+        save_json_to_file('get_active_bet_requests_response.json', response_json)
         return self.process_response(
             response=response,
             response_json=response_json,
@@ -407,6 +466,14 @@ class Betting(BaseEndpoint):
                     limit: int = None,
                     page: int = None
                     ) -> resources.BetHistoryRequest:
+        """
+        Returns bet history with paging options
+        :param username: Your username
+        :param status: The status of the bet
+        :param limit: Limit the number of bets returned
+        :param page: The page number to start from
+        :return: return a bet history resource
+        """
 
         if limit is None:
             method_uri = self._METHOD_URIS['bet_history'].format(username, status)
@@ -422,7 +489,11 @@ class Betting(BaseEndpoint):
             elapsed_time=elapsed_time
         )
 
-    def get_balance(self):
+    def get_balance(self)->Union[resources.Balance, resources.BaseRequestException]:
+        """
+        Gets the account balance
+        :return: The balance resource or the request exception resaource
+        """
 
         method_uri = self._METHOD_URIS['get_balance']
 
@@ -438,19 +509,18 @@ class Betting(BaseEndpoint):
     def get_viewed_next_page(self,
                              bet_request_id: str,
                              sport_id: int = None
-                             ):
+                             )->Union[resources.Viewed, resources.BaseRequestException]:
 
-        if sport_id:
+        if sport_id is None:
             method_uri = self._METHOD_URIS['get_viewed_next_prev'].format(bet_request_id)
         else:
             method_uri = self._METHOD_URIS['get_viewed_next_prev_sport'].format(bet_request_id, sport_id)
 
         (response, response_json, elapsed_time) = self.request(method_uri=method_uri, params={})
-        save_data_to_pickle_file('get_balance_response.pkl', response)
-        save_json_to_file('get_balance_response.json', response_json)
+
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.Balance,
+            resource=resources.Viewed,
             elapsed_time=elapsed_time
         )

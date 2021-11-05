@@ -17,15 +17,31 @@ def stop_active_bets(client: APIClient):
 client = APIClient(username=config("BETCONNECT_USERNAME"),
                    password=config("BETCONNECT_PASSWORD"),
                    api_key=config("BETCONNECT_API_KEY"),
-                   environment=Envirnoment.STAGING)
+                   environment=Envirnoment.PRODUCTION)
 
-lay_client = APIClient(username=config("BETCONNECT_LAY_USERNAME"),
-                   password=config("BETCONNECT_LAY_PASSWORD"),
-                   api_key=config("BETCONNECT_LAY_API_KEY"),
-                   environment=Envirnoment.STAGING)
 
 # Login
 login = client.login.login()
+
+active_sports = client.betting.active_sports()
+
+types = client.betting.active_market_types(14)
+
+fixtures = client.betting.active_fixtures(sport_id=SPORT_ID)
+
+
+bet_requests = []
+import time
+while True:
+    bet_request_get = client.betting.bet_request_get(
+        filter=resources.filters.GetBetRequestFilter(sport_id=14)
+    )
+    if isinstance(bet_request_get, resources.BetRequest):
+        bet_requests.append(bet_request_get)
+    else:
+        time.sleep(10)
+
+
 
 stop_active_bets(client)
 

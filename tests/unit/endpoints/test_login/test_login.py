@@ -41,5 +41,9 @@ class TestLogin:
         assert "X-AUTH-TOKEN" not in mock_login_endpoint.client.session.headers
 
 
-    def test_status(self, mock_login_endpoint: Login):
-        raise Exception('Return to ')
+    def test_status(self, mocker, mock_login_endpoint: Login, mock_status_response: Tuple[
+        Response, Dict[str, Any], float]):
+        login_request = mocker.patch('betconnect.endpoints.login.Login.post', return_value=mock_status_response)
+        status = mock_login_endpoint.status()
+        assert isinstance(status, resources.Login)
+

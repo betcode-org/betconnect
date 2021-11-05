@@ -2,13 +2,12 @@ from .baseendpoint import BaseEndpoint
 from betconnect import resources
 import time
 import logging
-from betconnect.resources.baseresource import BaseResource
 import requests
 from typing import Union, List
 from betconnect.exceptions import APIError
 
 logger = logging.getLogger(__name__)
-from tests.utils import save_json_to_file, save_data_to_pickle_file
+
 
 
 class Login(BaseEndpoint):
@@ -19,6 +18,10 @@ class Login(BaseEndpoint):
     }
 
     def login(self) -> resources.Login:
+        """
+        Logs the user in withhe username and password supplied to the client
+        :return: Login resource
+        """
         method_uri = self._METHOD_URIS['login']
 
         (response, response_json, elapsed_time) = self.post(method_uri=method_uri)
@@ -31,10 +34,14 @@ class Login(BaseEndpoint):
                 return resources.Login(**response_json)
             else:
                 raise Exception('Missing login token')
+        else:
+            raise Exception(f"Unable to login with the supplied username and passweord")
 
-
-
-    def logout(self):
+    def logout(self) -> None:
+        """
+        Logs the client out, removes all tokens.
+        :return: None
+        """
         method_uri = self._METHOD_URIS['logout']
 
         (response, response_json, elapsed_time) = self.post(method_uri=method_uri)
@@ -42,19 +49,21 @@ class Login(BaseEndpoint):
         if response.status_code == 200:
             self.client.process_logout()
 
-    def status(self):
+    def status(self) -> Union[resources.Login, None]:
+        """
+        Provides a refresh token for authentication
+        :return: None
+        """
         method_uri = self._METHOD_URIS['status']
 
         (response, response_json, elapsed_time) = self.post(method_uri=method_uri)
 
-        save_data_to_pickle_file('mock_logout_response_failure.pkl', response)
-        save_json_to_file('mock_logout_response_failure.json', response_json)
-        return
-        return self.process_response(
-            response=response,
-            response_json=response_json,
-            elapsed_time=elapsed_time
-        )
+        data = response_json.get('data')
+
+        if data:
+            if 'refresh_token' in data:
+                self.client.process_login(data['refresh_token'])
+                return resources.Login(**{'data':{'token':data['refresh_token']}, 'message':response_json.get('message')})
 
     def post(
             self,
