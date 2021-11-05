@@ -23,6 +23,5 @@ class APIClient(BaseClient):
         self.betting = endpoints.Betting(self)
         self.configuration = endpoints.Configuration(self)
         self.login = endpoints.Login(self)
-        self.account = endpoints.Account(self)
         super(APIClient, self).__init__(username=username, password=password,session=session,environment=environment,api_key=api_key)
 

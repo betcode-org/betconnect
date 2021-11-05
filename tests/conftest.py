@@ -26,14 +26,14 @@ def mock_api_client() -> APIClient:
 
 @pytest.fixture
 def staging_api_client() -> APIClient:
-    return APIClient(username=config('BETCONNECT_USERNAME'), password=config('BETCONNECT_PASSWORD'),
-                     api_key=config('BETCONNECT_API_KEY'), environment=Envirnoment.STAGING)
+    return APIClient(username=config('STAGING_BETCONNECT_USERNAME'), password=config('STAGING_BETCONNECT_PASSWORD'),
+                     api_key=config('STAGING_BETCONNECT_API_KEY'), environment=Envirnoment.STAGING)
 
 
 @pytest.fixture
 def staging_lay_api_client() -> APIClient:
-    return APIClient(username=config('BETCONNECT_LAY_USERNAME'), password=config('BETCONNECT_LAY_PASSWORD'),
-                     api_key=config('BETCONNECT_LAY_API_KEY'), environment=Envirnoment.STAGING)
+    return APIClient(username=config('STAGING_BETCONNECT_LAY_USERNAME'), password=config('STAGING_BETCONNECT_LAY_PASSWORD'),
+                     api_key=config('STAGING_BETCONNECT_LAY_API_KEY'), environment=Envirnoment.STAGING)
 
 
 @pytest.fixture
@@ -49,11 +49,6 @@ def mock_login_endpoint(staging_api_client) -> endpoints.Login:
 @pytest.fixture
 def mock_configuration_endpoint(staging_api_client) -> endpoints.Configuration:
     return endpoints.Configuration(staging_api_client)
-
-
-@pytest.fixture
-def mock_account_endpoint(staging_api_client) -> endpoints.Account:
-    return endpoints.Account(staging_api_client)
 
 
 @pytest.fixture()
