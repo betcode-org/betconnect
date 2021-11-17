@@ -31,8 +31,6 @@ class Betting(BaseEndpoint):
         'bet_request_stop': 'api/v2/bet_request_stop',
         'get_active_bet_requests': 'api/v2/get_active_bet_requests',
         'get_active_bet_requests_limit_page': 'api/v2/get_active_bet_requests/{}/{}',
-        'my_bets': 'api/v2/my_bets/{}/{}/{}',
-        'my_bets_get_all': 'api/v2/my_bets/{}/{}/{}/{}/{}',
         'prices': 'api/v2/prices/{}/{}/{}',
         'prices_handicap': 'api/v2/prices/{}/{}/{}/{}',
         'get_balance': '/api/v2/get_balance',
@@ -42,12 +40,10 @@ class Betting(BaseEndpoint):
         'selections_for_market_top_price': 'api/v2/selections_for_market/{}/{}/{}'
     }
 
-    # save_data_to_pickle_file('bet_request_stop_response.pkl', response)
-    # save_json_to_file('bet_request_stop_response.json', response_json)
-    def active_bookmakers(self) -> List[resources.ActiveBookmakers]:
+    def active_bookmakers(self) -> List[resources.ActiveBookmaker]:
         """
         Returns a list of active sports
-        :return: List of ActiveBookmakers
+        :return: List of ActiveBookmaker
         """
 
         method_uri = self._METHOD_URIS['active_bookmakers']
@@ -57,11 +53,11 @@ class Betting(BaseEndpoint):
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.ActiveBookmakers,
+            resource=resources.ActiveBookmaker,
             elapsed_time=elapsed_time
         )
 
-    def active_sports(self, with_bets: bool = None) -> List[resources.ActiveSports]:
+    def active_sports(self, with_bets: bool = None) -> List[resources.ActiveSport]:
         """
         Gets a list of active sports
         :param with_bets: boolean value (True, False)
@@ -77,7 +73,7 @@ class Betting(BaseEndpoint):
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.ActiveSports,
+            resource=resources.ActiveSport,
             elapsed_time=elapsed_time
         )
 
@@ -103,12 +99,12 @@ class Betting(BaseEndpoint):
     def active_competitions(self,
                             sport_id: int,
                             region_id: int
-                            ) -> List[resources.ActiveCompetitions]:
+                            ) -> List[resources.ActiveCompetition]:
         """
         Returns a list of active competitions for a given sport id and region id
         :param sport_id: The sport ID
         @:param region_id: The region ID
-        :return: List of ActiveBookmakers
+        :return: List of ActiveBookmaker
         """
 
         method_uri = self._METHOD_URIS['active_competitions'].format(sport_id, region_id)
@@ -118,7 +114,7 @@ class Betting(BaseEndpoint):
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.ActiveCompetitions,
+            resource=resources.ActiveCompetition,
             elapsed_time=elapsed_time
         )
 
@@ -126,7 +122,7 @@ class Betting(BaseEndpoint):
                         sport_id: int,
                         region_id: int = None,
                         competition_id: int = None
-                        ) -> List[resources.ActiveFixtures]:
+                        ) -> List[resources.ActiveFixture]:
         """
         Gets active fixtures for a sport, region and competition
         :param sport_id: The sport ID
@@ -148,11 +144,11 @@ class Betting(BaseEndpoint):
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.ActiveFixtures,
+            resource=resources.ActiveFixture,
             elapsed_time=elapsed_time
         )
 
-    def active_market_types(self, sport_id: int) -> List[resources.ActiveMarketTypes]:
+    def active_market_types(self, sport_id: int) -> List[resources.ActiveMarketType]:
         """
         Gets the active market type for a sport
         :param sport_id: The sport ID
@@ -165,11 +161,11 @@ class Betting(BaseEndpoint):
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.ActiveMarketTypes,
+            resource=resources.ActiveMarketType,
             elapsed_time=elapsed_time
         )
 
-    def active_markets(self, fixture_id: int, grouped: bool = None) -> List[resources.ActiveMarkets]:
+    def active_markets(self, fixture_id: int, grouped: bool = None) -> List[resources.ActiveMarket]:
         """
         Gets a list of active markets for the fixture
         :param fixture_id: The fixture ID
@@ -186,12 +182,12 @@ class Betting(BaseEndpoint):
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.ActiveMarkets,
+            resource=resources.ActiveMarket,
             elapsed_time=elapsed_time
         )
 
     def active_selections(self, fixture_id: int, market_type_id: int, handicap: bool = None) -> List[
-        resources.ActiveSelections]:
+        resources.ActiveSelection]:
         """
         Gets active selections for a given fixture and market type
         :param fixture_id: The fixture ID
@@ -209,40 +205,9 @@ class Betting(BaseEndpoint):
         return self.process_response(
             response=response,
             response_json=response_json,
-            resource=resources.ActiveSelections,
+            resource=resources.ActiveSelection,
             elapsed_time=elapsed_time
         )
-
-    def get_fixtures_with_active_selections(self,
-                                            sport_id: int,
-                                            market_type_id: int,
-                                            handicap: bool = False,
-                                            region_id: int = None,
-                                            competition_id: int = None
-                                            ) -> List[resources.ActiveFixtures]:
-        active_fixtures = self.active_fixtures(
-            sport_id=sport_id,
-            region_id=region_id,
-            competition_id=competition_id
-        )
-        for fixture in active_fixtures:
-            selections = self.active_selections(
-                fixture_id=fixture.fixture_id,
-                market_type_id=market_type_id,
-                handicap=handicap
-            )
-            if selections:
-                for selection in selections:
-                    price = self.prices(
-                        fixture_id=fixture.fixture_id,
-                        market_type_id=market_type_id,
-                        competitor=selection.competitor,
-                        handicap=handicap
-                    )
-                    if price:
-                        selection.add_prices(price)
-                    fixture.add_selections(selection)
-        return active_fixtures
 
     def bet_request_create(self,
                            filter: resources.CreateBetRequestFilter
@@ -300,7 +265,7 @@ class Betting(BaseEndpoint):
                               fixture_id: int,
                               market_type_id: int,
                               top_price_only: bool = None
-                              ) -> resources.BetRequest:
+                              ) -> Union[resources.BaseRequestException,List[resources.SelectionsForMarket]]:
         if top_price_only:
             assert isinstance(top_price_only, bool)
             method_uri = self._METHOD_URIS['selections_for_market_top_price'].format(fixture_id, market_type_id,
@@ -413,29 +378,6 @@ class Betting(BaseEndpoint):
             response=response,
             response_json=response_json,
             resource=resources.ActiveBetsRequest,
-            elapsed_time=elapsed_time
-        )
-
-    def my_bets(self,
-                side: str,
-                user_id: str,
-                status: str,
-                limit: int = None,
-                page: int = None,
-                get_all: bool = None
-                ):
-        if get_all:
-            method_uri = self._METHOD_URIS['my_bets_get_all'].format(side, user_id, status)
-        else:
-            method_uri = self._METHOD_URIS['my_bets'].format(side, user_id, status)
-
-        (response, response_json, elapsed_time) = self.post(method_uri=method_uri, params={})
-        save_data_to_pickle_file('get_active_bet_requests_response.pkl', response)
-        save_json_to_file('get_active_bet_requests_response.json', response_json)
-        return self.process_response(
-            response=response,
-            response_json=response_json,
-            resource=resources.ActiveSelections,
             elapsed_time=elapsed_time
         )
 

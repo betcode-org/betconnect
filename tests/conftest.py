@@ -46,11 +46,6 @@ def mock_login_endpoint(staging_api_client) -> endpoints.Login:
     return endpoints.Login(staging_api_client)
 
 
-@pytest.fixture
-def mock_configuration_endpoint(staging_api_client) -> endpoints.Configuration:
-    return endpoints.Configuration(staging_api_client)
-
-
 @pytest.fixture()
 def mock_login_response_pkl() -> Response:
     return load_pickle(build_path('resources/endpoints/login/mock_login_response_success.pkl'))

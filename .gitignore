@@ -2,4 +2,6 @@
 .pyc
 .xml
 /.idea
-
+*.pytest_cache
+*.egg-info
+*.build

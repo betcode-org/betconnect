@@ -4,7 +4,7 @@ from typing import List, Union
 from datetime import datetime
 
 
-class ActiveBookmakers(BaseResource):
+class ActiveBookmaker(BaseResource):
     name: str
     bookmaker_id: int
     order: int
@@ -14,7 +14,7 @@ class ActiveBookmakers(BaseResource):
         return f"Bookmaker: {self.name} ({self.bookmaker_id}), Active: {self.active}"
 
 
-class ActiveSports(BaseResource):
+class ActiveSport(BaseResource):
     id: int
     sport_id: int
     name: str
@@ -39,7 +39,7 @@ class ActiveRegion(BaseResource):
         return 'Region: {}({})'.format(self.name, self.region_id)
 
 
-class ActiveCompetitions(BaseResource):
+class ActiveCompetition(BaseResource):
     name: str
     display_name: str
     competition_id: int
@@ -50,7 +50,7 @@ class ActiveCompetitions(BaseResource):
         return f"Competition: {self.name}({self.competition_id})"
 
 
-class ActiveMarketTypes(BaseResource):
+class ActiveMarketType(BaseResource):
     market_type_id: int
     name: str
     active: int
@@ -59,7 +59,7 @@ class ActiveMarketTypes(BaseResource):
         return f"Market Type: {self.name}({self.market_type_id})"
 
 
-class ActiveMarkets(BaseResource):
+class ActiveMarket(BaseResource):
     name: str
     display_name: str
     trading_status: str
@@ -73,7 +73,7 @@ class ActiveMarkets(BaseResource):
 
 
 class Balance(BaseResource):
-    balance: float
+    balance: int
 
     def __repr__(self):
         return f"Balance: {self.balance}"
@@ -103,7 +103,7 @@ class Price(BaseResource):
         return False
 
 
-class ActiveSelections(BaseResource):
+class ActiveSelection(BaseResource):
     name: str
     trading_status: str
     selection_id: int
@@ -111,7 +111,7 @@ class ActiveSelections(BaseResource):
     competitor: str
 
     def __eq__(self, other) -> bool:
-        if isinstance(other, ActiveSelections):
+        if isinstance(other, ActiveSelection):
             return other.selection_id == self.selection_id
         return False
 
@@ -119,22 +119,11 @@ class ActiveSelections(BaseResource):
         return f"Selection: {self.name} ({self.selection_id})"
 
 
-class ActiveFixtures(BaseResource):
+class ActiveFixture(BaseResource):
     fixture_id: int
     display_name: str
     startdate: str
     time: str
-    selections: List[ActiveSelections] = Field(default=[])
-
-    def _add_selection(self, selection: ActiveSelections):
-        if selection not in self.selections:
-            self.selections.append(selection)
-
-    def add_selections(self, selections: Union[ActiveSelections, List[ActiveSelections]]) -> None:
-        if isinstance(selections, ActiveSelections):
-            self._add_selection(selection=selections)
-        elif isinstance(selections, list):
-            [self._add_selection(selection=s) for s in selections if isinstance(s, ActiveSelections)]
 
     def __repr__(self):
         return f"Fixture: {self.display_name}({self.fixture_id}) {self.startdate}"
@@ -194,6 +183,9 @@ class BetRequest(BaseResource):
         else:
             raise TypeError(f"Expected value of type str or datetime")
 
+    def __hash__(self):
+        return hash(f"{self.fixture_name}-{self.selection_name}-{self.start_time_utc.isoformat()}")
+
 
 class BetRequestCreate(BaseResource):
     bet_request_id: str
@@ -252,7 +244,7 @@ class BetHistory(BaseResource):
         else:
             raise TypeError(f"Expected value of type str or datetime")
 
-class ActiveBets(BaseResource):
+class ActiveBet(BaseResource):
     bet_request_id: str
     bet_type_name: str
     competition_name: str
@@ -269,6 +261,7 @@ class ActiveBets(BaseResource):
     selection_name: str
     sport_name: str
     stake: float
+    fixture_id: int = Field(default=None)
     status_name: str
 
     @validator('created_at', 'fixture_start_date', pre=True)
@@ -280,8 +273,15 @@ class ActiveBets(BaseResource):
         else:
             raise TypeError(f"Expected value of type str or datetime")
 
+    @property
+    def bet_hash(self)->str:
+        return self.__hash__()
+
+    def __hash__(self)->str:
+        return hash(f"{self.fixture_name}-{self.selection_name}-{self.fixture_start_date.isoformat()}")
+
 class ActiveBetsRequest(BaseResource):
-    bets: List[ActiveBets]
+    bets: List[ActiveBet]
     bets_active: int
     last_page: int
     total_bets: int

@@ -19,7 +19,7 @@ class TestBetting:
         active_bookmakers = mock_betting_endpoint.active_bookmakers()
         assert isinstance(active_bookmakers, list)
         for s in active_bookmakers:
-            assert isinstance(s, resources.ActiveBookmakers)
+            assert isinstance(s, resources.ActiveBookmaker)
         request.assert_called()
 
     def test_active_competitions(self, mocker, mock_betting_endpoint: Betting,
@@ -29,7 +29,7 @@ class TestBetting:
         active_competitions = mock_betting_endpoint.active_competitions(sport_id=14, region_id=3795032)
         assert isinstance(active_competitions, list)
         for r in active_competitions:
-            assert isinstance(r, resources.ActiveCompetitions)
+            assert isinstance(r, resources.ActiveCompetition)
         request.assert_called()
 
     def test_active_fixtures(self, mocker, mock_betting_endpoint: Betting,
@@ -39,17 +39,17 @@ class TestBetting:
         active_fixtures = mock_betting_endpoint.active_fixtures(sport_id=14)
         assert isinstance(active_fixtures, list)
         for r in active_fixtures:
-            assert isinstance(r, resources.ActiveFixtures)
+            assert isinstance(r, resources.ActiveFixture)
 
         active_fixtures = mock_betting_endpoint.active_fixtures(sport_id=14, region_id=3795032)
         assert isinstance(active_fixtures, list)
         for r in active_fixtures:
-            assert isinstance(r, resources.ActiveFixtures)
+            assert isinstance(r, resources.ActiveFixture)
 
         active_fixtures = mock_betting_endpoint.active_fixtures(sport_id=14, region_id=3795032, competition_id=828)
         assert isinstance(active_fixtures, list)
         for r in active_fixtures:
-            assert isinstance(r, resources.ActiveFixtures)
+            assert isinstance(r, resources.ActiveFixture)
         request.assert_called()
 
     def test_active_market_types(self, mocker, mock_betting_endpoint: Betting, mock_active_market_types_response: Tuple[
@@ -59,7 +59,7 @@ class TestBetting:
         active_market_types = mock_betting_endpoint.active_market_types(sport_id=14)
         assert isinstance(active_market_types, list)
         for r in active_market_types:
-            assert isinstance(r, resources.ActiveMarketTypes)
+            assert isinstance(r, resources.ActiveMarketType)
         request.assert_called()
 
     def test_active_markets(self, mocker, mock_betting_endpoint: Betting, mock_active_markets_response: Tuple[
@@ -69,12 +69,12 @@ class TestBetting:
         active_markets = mock_betting_endpoint.active_markets(fixture_id=8573302)
         assert isinstance(active_markets, list)
         for r in active_markets:
-            assert isinstance(r, resources.ActiveMarkets)
+            assert isinstance(r, resources.ActiveMarket)
 
         active_markets = mock_betting_endpoint.active_markets(fixture_id=8573302, grouped=True)
         assert isinstance(active_markets, list)
         for r in active_markets:
-            assert isinstance(r, resources.ActiveMarkets)
+            assert isinstance(r, resources.ActiveMarket)
 
         request.assert_called()
 
@@ -98,13 +98,13 @@ class TestBetting:
         active_sports = mock_betting_endpoint.active_sports()
         assert isinstance(active_sports, list)
         for s in active_sports:
-            assert isinstance(s, resources.ActiveSports)
+            assert isinstance(s, resources.ActiveSport)
         request.assert_called()
 
         active_sports = mock_betting_endpoint.active_sports(with_bets=True)
         assert isinstance(active_sports, list)
         for s in active_sports:
-            assert isinstance(s, resources.ActiveSports)
+            assert isinstance(s, resources.ActiveSport)
         request.assert_called()
 
     def test_active_selections(self, mocker, mock_betting_endpoint: Betting, mock_active_selections_response: Tuple[
@@ -117,12 +117,12 @@ class TestBetting:
         active_selections = mock_betting_endpoint.active_selections(fixture_id=8573302, market_type_id=6)
         assert isinstance(active_selections, list)
         for r in active_selections:
-            assert isinstance(r, resources.ActiveSelections)
+            assert isinstance(r, resources.ActiveSelection)
 
         active_selections = mock_betting_endpoint.active_selections(fixture_id=8234079, market_type_id=6, handicap=True)
         assert isinstance(active_selections, list)
         for r in active_selections:
-            assert isinstance(r, resources.ActiveSelections)
+            assert isinstance(r, resources.ActiveSelection)
 
         request.assert_called()
 

@@ -21,7 +21,6 @@ class APIClient(BaseClient):
         :param session: Session object used in request default None. Session created if None with auth and headers handled.
         """
         self.betting = endpoints.Betting(self)
-        self.configuration = endpoints.Configuration(self)
         self.login = endpoints.Login(self)
         super(APIClient, self).__init__(username=username, password=password,session=session,environment=environment,api_key=api_key)
 

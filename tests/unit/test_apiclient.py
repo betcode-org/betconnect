@@ -8,7 +8,6 @@ class TestAPIClient:
         assert client._password == '123'
         assert client._api_key == '456'
         assert isinstance(client.login, endpoints.Login)
-        assert isinstance(client.configuration,endpoints.Configuration)
         assert isinstance(client.betting, endpoints.Betting)
 
 
