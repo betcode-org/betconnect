@@ -16,18 +16,20 @@ from .betting import (
     BetHistoryRequest,
     SelectionsForMarket,
     ActiveBet,
-    ActiveBetsRequest,
+    ActiveBetRequests,
     Viewed,
-    BetRequestMatchMore
+    BetRequestMatchMore,
+    PricesBookmaker,
+    BackersStats,
+    MyActiveBet,
+    MyBetsBetRequests,
+    BetRequestStop,
+    CustomerOrderRef,
+    CustomerStrategyRef,
+    LockBet
 )
-from .filters import (
-    GetBetRequestFilter,
-    CreateBetRequestFilter
-)
+from .filters import Filter, GetBetRequestFilter, CreateBetRequestFilter
 
-from .login import (
-    Login,
-    Token
-)
+from .account import Login, Token, AccountPreferences
 
-from .messages import (BaseRequestException, ResponseMessage)
+from .messages import BaseRequestException, ResponseMessage

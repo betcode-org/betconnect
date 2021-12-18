@@ -3,3 +3,5 @@ requests
 python-decouple
 pytest
 pytest-mock
+requests
+setuptools
