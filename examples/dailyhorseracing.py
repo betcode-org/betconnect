@@ -3,7 +3,6 @@ from betconnect import resources
 from decouple import config
 from betconnect.enums import Environment
 import logging
-from betconnect import utils
 from betconnect import enums
 import uuid
 
@@ -14,7 +13,7 @@ This script is an example workflow for betting on a horse racing market.
 PLEASE MAKE SURE YOU ARE ONLY PRACTICING ORDERS AGAINST STAGING ENVIRONMENTS IF YOU HAVE NOT FULLY TESTED YOUR APP!
 """
 
-# Strategy name max length = 15, no spaces. If require longer use hashing function in utils.
+# Strategy name max length = 15, no spaces. If you require longer use hashing function in utils.
 STRATEGY_NAME = "horse_racing"
 
 # Create a trading client instance
@@ -23,6 +22,7 @@ client = APIClient(
     password=config("STAGING_BETCONNECT_PASSWORD"),
     api_key=config("STAGING_BETCONNECT_API_KEY"),
     environment=Environment.STAGING,
+    personalised_production_url=config("PRODUCTION_URI"),
 )
 
 assert client.environment == Environment.STAGING
@@ -120,8 +120,12 @@ for fixture in active_fixtures[-1:]:
                 price=best_price.price,
                 stake=500,
                 bet_type="Win",
-                customer_strategy_ref=utils.create_customer_strategy_ref(STRATEGY_NAME),
-                customer_order_ref=utils.create_customer_order_ref(str(uuid.uuid4())),
+                customer_strategy_ref=resources.CustomerStrategyRef.create_customer_strategy_ref(
+                    STRATEGY_NAME
+                ),
+                customer_order_ref=resources.CustomerOrderRef.create_customer_order_ref(
+                    str(uuid.uuid4())
+                ),
             )
         )
         if isinstance(bet_create_response, resources.BetRequestCreate):
@@ -140,14 +144,6 @@ for fixture in active_fixtures[-1:]:
             my_active_back_bets = client.betting.my_bets(
                 side=enums.BetSide.BACK, status=enums.BetRequestStatus.ACTIVE
             )
-
-            # Lock that bet
-            client.betting.lock_bet(
-                bet_request_id=bet_create_response.bet_request_id,
-                bet_status_id=1,
-                allocated_stake=100
-            )
-
 
         else:
             logger.exception(f"Issue creating bet request with the supplied params")

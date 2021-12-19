@@ -2,6 +2,8 @@ from betconnect import resources
 from datetime import datetime
 import pytest
 from betconnect import exceptions
+from uuid import UUID
+
 
 class TestBettingResources:
     def test_active_bookmaker(self):
@@ -189,7 +191,9 @@ class TestBettingResources:
         assert bet_request.fixture_id == 8757185
         assert bet_request.market_type_id == 6
         assert bet_request.competitor == "1207634"
-        assert bet_request.bet_request_id == "0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5369"
+        assert bet_request.bet_request_id == UUID(
+            "0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5369"
+        )
         assert bet_request.bet_type == "Win"
         assert bet_request.requested_stake == 5.0
         assert bet_request.liability == 11.25
@@ -205,8 +209,8 @@ class TestBettingResources:
             debit_stake=5,
             debit_commission=0.1,
         )
-        assert (
-            bet_request_create.bet_request_id == "0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5369"
+        assert bet_request_create.bet_request_id == UUID(
+            "0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5369"
         )
         assert isinstance(bet_request_create.created, datetime)
         assert bet_request_create.debit_stake == 5
@@ -232,7 +236,7 @@ class TestBettingResources:
             stake=10.0,
             status_name="Active",
         )
-        assert active_bet.bet_request_id == "45e1a024-523a-4b25-a33d-4466775d0aac"
+        assert active_bet.bet_request_id == UUID("45e1a024-523a-4b25-a33d-4466775d0aac")
         assert active_bet.bet_type_name == "Win"
         assert active_bet.competition_name == "Hamilton Park"
         assert isinstance(active_bet.created_at, datetime)
@@ -261,8 +265,8 @@ class TestBettingResources:
         )
         assert bet_request_match.matched
         assert bet_request_match.available
-        assert (
-            bet_request_match.bet_request_id == "45e1a024-523a-4b25-a33d-4466775d0aac"
+        assert bet_request_match.bet_request_id == UUID(
+            "45e1a024-523a-4b25-a33d-4466775d0aac"
         )
         assert bet_request_match.bet_id == "124"
         assert bet_request_match.bet_status == "Active"
@@ -289,7 +293,9 @@ class TestBettingResources:
             stake=5.0,
         )
 
-        assert bet_history.bet_request_id == "0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5369"
+        assert bet_history.bet_request_id == UUID(
+            "0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5369"
+        )
         assert bet_history.bet_request_status == "Active"
         assert bet_history.bet_type_name == "Win"
         assert bet_history.competition_name == "Kempton Park"
@@ -386,8 +392,8 @@ class TestBettingResources:
             next="0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5589",
         )
 
-        assert viewed.prev == "0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5369"
-        assert viewed.next == "0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5589"
+        assert viewed.prev == UUID("0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5369")
+        assert viewed.next == UUID("0f6efaa7-ffc3-45e9-8cf5-aa07e8ef5589")
 
     def test_bet_request_match_more(self):
         bet_request_match_more = resources.BetRequestMatchMore(
@@ -403,71 +409,72 @@ class TestBettingResources:
         assert isinstance(bet_request_match_more, resources.BetRequestMatchMore)
 
     def test_bet_request_stop(self):
-        bet_request_stop = resources.BetRequestStop(
-            pending=False
-        )
+        bet_request_stop = resources.BetRequestStop(pending=False)
         assert bet_request_stop.pending is False
 
     def test_my_active_bet(self):
         my_active_bet = resources.MyActiveBet(
-            actioned_at = '2021-07-15 09:35:26',
+            actioned_at="2021-07-15 09:35:26",
             bet_created=1,
-            bet_request_id='a575ba8b-2264-4f14-8f59-9eeb805e5a37',
+            bet_request_id="a575ba8b-2264-4f14-8f59-9eeb805e5a37",
             bet_request_status_id=1,
-            bet_request_user_id='a6a1eb91-6217-4e0c-b759-fbcaa2b7a8ac',
-            bet_type_name='Win',
-            competition_name='Hamilton Park',
+            bet_request_user_id="a6a1eb91-6217-4e0c-b759-fbcaa2b7a8ac",
+            bet_type_name="Win",
+            competition_name="Hamilton Park",
             count_in_place=None,
-            fill_percentage = 0.0,
-            fixture_name='Hamilton Park',
-            fixture_start_date='2021-07-15 12:00:00',
-            market_name='Race Winner',
+            fill_percentage=0.0,
+            fixture_name="Hamilton Park",
+            fixture_start_date="2021-07-15 12:00:00",
+            market_name="Race Winner",
             matched_stake=0,
-            price={'decimal': '1.16', 'fraction': {'denominator': 25, 'numerator': 4}},
+            price={"decimal": "1.16", "fraction": {"denominator": 25, "numerator": 4}},
             profit=0,
-            region_iso='scotland',
-            region_name='Scotland',
-            selection_name='Misty Ayr',
+            region_iso="scotland",
+            region_name="Scotland",
+            selection_name="Misty Ayr",
             sport_external_id=14,
-            sport_name='Horse Racing',
-            sport_slug='horse-racing',
+            sport_name="Horse Racing",
+            sport_slug="horse-racing",
             stake=1000,
-            status_name='Active',
-            status_slug='active',
+            status_name="Active",
+            status_slug="active",
         )
-        assert isinstance(my_active_bet.actioned_at,datetime)
+        assert isinstance(my_active_bet.actioned_at, datetime)
         assert my_active_bet.adjustment is None
         assert my_active_bet.adjustment_type is None
         assert my_active_bet.bet_created == 1
-        assert my_active_bet.bet_request_id == 'a575ba8b-2264-4f14-8f59-9eeb805e5a37'
+        assert my_active_bet.bet_request_id == UUID(
+            "a575ba8b-2264-4f14-8f59-9eeb805e5a37"
+        )
         assert my_active_bet.bet_request_status_id == 1
-        assert my_active_bet.bet_request_user_id == 'a6a1eb91-6217-4e0c-b759-fbcaa2b7a8ac'
-        assert my_active_bet.bet_type_name == 'Win'
-        assert my_active_bet.competition_name == 'Hamilton Park'
+        assert my_active_bet.bet_request_user_id == UUID(
+            "a6a1eb91-6217-4e0c-b759-fbcaa2b7a8ac"
+        )
+        assert my_active_bet.bet_type_name == "Win"
+        assert my_active_bet.competition_name == "Hamilton Park"
         assert my_active_bet.count_in_place is None
         assert my_active_bet.customer_order_ref is None
         assert my_active_bet.customer_strategy_ref is None
         assert my_active_bet.each_way_factor is None
         assert my_active_bet.fill_percentage == 0.0
-        assert my_active_bet.fixture_name == 'Hamilton Park'
-        assert isinstance(my_active_bet.fixture_start_date,datetime)
+        assert my_active_bet.fixture_name == "Hamilton Park"
+        assert isinstance(my_active_bet.fixture_start_date, datetime)
         assert my_active_bet.handicap is None
-        assert my_active_bet.market_name == 'Race Winner'
+        assert my_active_bet.market_name == "Race Winner"
         assert my_active_bet.matched_stake == 0
-        assert isinstance(my_active_bet.price,resources.Price)
-        assert my_active_bet.profit ==0
+        assert isinstance(my_active_bet.price, resources.Price)
+        assert my_active_bet.profit == 0
         assert my_active_bet.profit_loss is None
-        assert my_active_bet.region_iso=='scotland'
-        assert my_active_bet.region_name=='Scotland'
-        assert my_active_bet.selection_name=='Misty Ayr'
-        assert my_active_bet.sport_external_id==14
-        assert my_active_bet.sport_name=='Horse Racing'
-        assert my_active_bet.sport_slug=='horse-racing'
-        assert my_active_bet.stake==1000
-        assert my_active_bet.status_name=='Active'
-        assert my_active_bet.status_slug=='active'
+        assert my_active_bet.region_iso == "scotland"
+        assert my_active_bet.region_name == "Scotland"
+        assert my_active_bet.selection_name == "Misty Ayr"
+        assert my_active_bet.sport_external_id == 14
+        assert my_active_bet.sport_name == "Horse Racing"
+        assert my_active_bet.sport_slug == "horse-racing"
+        assert my_active_bet.stake == 1000
+        assert my_active_bet.status_name == "Active"
+        assert my_active_bet.status_slug == "active"
         assert my_active_bet.sub_account_id is None
-
 
     def test_customer_order_ref(self):
         customer_order_ref_gen = resources.CustomerOrderRef.generate_random_order_ref()
@@ -479,18 +486,61 @@ class TestBettingResources:
 
         with pytest.raises(exceptions.BetRequestInvalidCustomerOrderRefFormatException):
             resources.CustomerOrderRef(
-                customer_order_ref='111111111111111111111111111111111111111111111111111'
+                customer_order_ref="111111111111111111111111111111111111111111111111111"
+            )
+
+        # test customer order ref generate random UUID
+        assert isinstance(
+            UUID(resources.CustomerOrderRef.generate_random_order_ref()), UUID
+        )
+
+        customer_order_ref = resources.CustomerOrderRef.create_customer_order_ref(
+            customer_order_ref="12344"
+        )
+        assert customer_order_ref.customer_order_ref == "12344"
+
+        with pytest.raises(exceptions.BetRequestInvalidCustomerOrderRefFormatException):
+            resources.CustomerOrderRef.create_customer_order_ref(customer_order_ref="")
+
+        with pytest.raises(exceptions.BetRequestInvalidCustomerOrderRefFormatException):
+            resources.CustomerOrderRef.create_customer_order_ref(
+                customer_order_ref="11111111111111111111111111111111111111111"
             )
 
     def test_customer_strategy_ref(self):
-        customer_strategy_ref_value = 'best_strategy'
+        customer_strategy_ref_value = "best_strategy"
         customer_strategy_ref = resources.CustomerStrategyRef(
             customer_strategy_ref=customer_strategy_ref_value
         )
-        assert customer_strategy_ref.customer_strategy_ref == customer_strategy_ref_value
+        assert (
+            customer_strategy_ref.customer_strategy_ref == customer_strategy_ref_value
+        )
         assert str(customer_strategy_ref) == customer_strategy_ref_value
 
-        with pytest.raises(exceptions.BetRequestInvalidCustomerStrategyRefFormatException):
+        with pytest.raises(
+            exceptions.BetRequestInvalidCustomerStrategyRefFormatException
+        ):
             resources.CustomerStrategyRef(
-                customer_strategy_ref='111111111111111111111111111111111111111111111111111'
+                customer_strategy_ref="111111111111111111111111111111111111111111111111111"
             )
+
+        customer_stratey_ref = (
+            resources.CustomerStrategyRef.create_customer_strategy_ref("1234")
+        )
+        assert customer_stratey_ref.customer_strategy_ref == "1234"
+        customer_stratey_ref = (
+            resources.CustomerStrategyRef.create_customer_strategy_ref("123 4")
+        )
+        assert customer_stratey_ref.customer_strategy_ref == "1234"
+
+        with pytest.raises(
+            exceptions.BetRequestInvalidCustomerStrategyRefFormatException
+        ):
+            resources.CustomerStrategyRef.create_customer_strategy_ref(
+                "12343333333333333333333333"
+            )
+
+        with pytest.raises(
+            exceptions.BetRequestInvalidCustomerStrategyRefFormatException
+        ):
+            resources.CustomerStrategyRef.create_customer_strategy_ref("")

@@ -2,9 +2,7 @@ from datetime import datetime
 from requests import Session
 from betconnect.baseclient import BaseClient
 from betconnect.enums import Environment
-
-PRODUCTION_URI = "https://prd.betconnect.com/"  # todo check this
-STAGING_URI = "https://stgapi.betconnect.com/"
+from betconnect import config
 
 
 class TestBaseClient:
@@ -14,7 +12,7 @@ class TestBaseClient:
             password="123",
             api_key="456",
             environment=Environment.STAGING,
-            personalised_production_url=PRODUCTION_URI
+            personalised_production_url="https://jimbob.betconnect.com/",
         )
         assert isinstance(client.session, Session)
         assert client._username == "test"
@@ -45,9 +43,9 @@ class TestBaseClient:
 
     def test__set_endpoint_uris(self, mock_base_client):
         mock_base_client._set_endpoint_uris(environment=Environment.STAGING)
-        assert mock_base_client.uri == STAGING_URI
+        assert mock_base_client.uri == config.DEFAULT_STAGING_URL
         mock_base_client._set_endpoint_uris(environment=Environment.PRODUCTION)
-        assert mock_base_client.uri == PRODUCTION_URI
+        assert mock_base_client.uri == mock_base_client._personalised_production_url
 
     def test_process_login(self, mock_base_client):
         mock_base_client.process_login(token="test_token")

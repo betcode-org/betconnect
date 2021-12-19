@@ -2,14 +2,11 @@ import logging
 import time
 from typing import Union, Tuple, Optional
 import requests
+from betconnect import exceptions
 from betconnect import resources
 from .baseendpoint import BaseEndpoint
-from betconnect import exceptions
-import json
 
 logger = logging.getLogger(__name__)
-
-from tests.utils import save_data_to_pickle_file, save_json_to_file
 
 
 class Account(BaseEndpoint):
@@ -18,7 +15,7 @@ class Account(BaseEndpoint):
     ) -> Union[resources.AccountPreferences, resources.BaseRequestException]:
         """
         Retrieves user preferences for the current account
-        :return: Account preference resource or the request exception resource
+        :return: A AccountPreferences resource or an BaseRequestException when BetConnect detects an issue.
         """
 
         (response, response_json, elapsed_time) = self._request(
@@ -42,13 +39,12 @@ class Account(BaseEndpoint):
     def get_balance(self) -> Union[resources.Balance, resources.BaseRequestException]:
         """
         Gets the account balance
-        :return: The balance resource or the request exception resource
+        :return: A Balance resource or an BaseRequestException when BetConnect detects an issue.
         """
 
         (response, response_json, elapsed_time) = self._request(
             method_uri=f"{self.api_version}/get_balance", authenticated=True
         )
-
 
         balance = self.process_response(
             response=response,
@@ -130,7 +126,9 @@ class Account(BaseEndpoint):
         if response.status_code == 200:
             self.client.process_logout()
         else:
-            logger.warning(f"There may have been an issue logging out. Expected status code 200, got status code {response.status_code}")
+            logger.warning(
+                f"There may have been an issue logging out. Expected status code 200, got status code {response.status_code}"
+            )
 
     def refresh_session_token(self) -> Optional[resources.Login]:
         """
@@ -156,16 +154,15 @@ class Account(BaseEndpoint):
             else:
                 logger.debug("No refresh token supplied")
 
-
     # noinspection PyProtectedMember
     def _post(
         self, method_uri: str, params: dict = None, authenticated: bool = True
     ) -> Tuple[requests.Response, dict, float]:
         """
         Post method
-        :param str method_uri: uri to be used, defined by each function.
-        :param dict params: Query Params to be used in request
-        :return Tuple[dict, float]: re
+        :param method_uri: uri to be used, defined by each function.
+        :param params: Query Params to be used in request
+        :return: tuple of the Response, dict (json_dict), float (elapsed time)
         """
         params = params if params else {}
 
@@ -173,7 +170,7 @@ class Account(BaseEndpoint):
         time_sent = time.time()
 
         try:
-            logger.debug(f"requesting the data for f{uri}")
+            logger.debug(f"requesting the data for {uri}")
 
             response = self.session.post(uri, timeout=self._read_timeout)
 
@@ -184,11 +181,12 @@ class Account(BaseEndpoint):
 
         elapsed_time = time.time() - time_sent
 
-        response_json = self._load_content(response)
+        response_json = self.load_json_content(response)
 
-
-        if self._check_status_code(response) is False:
-            raise exceptions.UnexpectedResponseStatusCode(status_code=response.status_code,url=response.url)
+        if self.check_status_code(response) is False:
+            raise exceptions.UnexpectedResponseStatusCode(
+                status_code=response.status_code, url=response.url
+            )
 
         return response, response_json, elapsed_time
 

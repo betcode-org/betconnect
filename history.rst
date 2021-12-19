@@ -3,6 +3,35 @@
 Release History
 ---------------
 
+0.0.3 (19-12-2021)
++++++++++++++++++++
+**ApiClient Changes (Breaking Changes)**
+
+- new personalised_production_url made a manditory paramater on the client
+
+**Baseendpoint (Breaking Changes)**
+
+- process_request_exception, check_bet_request_id, load_json_content, check_status_code changed to staticmethods
+
+**CustomerStrategyRef & CustomerOrderRef (Breaking Changes)**
+
+- is_valid_customer_order_ref & is_valid_customer_strategy_ref moved onto the class as a staticmethod (from utils)
+- create_customer_order_ref & create_customer_strategy_ref moved to the class as classmethods (from utils)
+
+**Updated Testing**
+
+- All betting functions and resources re-tested to new BetConnect swagger spec
+- exceptions classes
+
+**Examples Updated**
+
+- examples updated to reflect new required personalised_production_url
+
+**House Keeping**
+
+- Docstring updates
+- gammar and spelling updates
+
 0.0.2 (18-12-2021)
 +++++++++++++++++++
 **ApiClient Changes (Breaking Changes)**

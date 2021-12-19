@@ -19,6 +19,7 @@ client = APIClient(
     password=config("STAGING_BETCONNECT_PASSWORD"),
     api_key=config("STAGING_BETCONNECT_API_KEY"),
     environment=Environment.STAGING,
+    personalised_production_url=config("PRODUCTION_URI"),
 )
 
 # login
@@ -34,11 +35,11 @@ my_active_back_bets = client.betting.my_bets(
 cancellation_responses = []
 
 if len(my_active_back_bets.bets) > 0:
-    for bet in my_active_back_bets.bets[::-1]: # type: resources.MyActiveBet
+    for bet in my_active_back_bets.bets[::-1]:  # type: resources.MyActiveBet
         if bet.fixture_start_date:
             if bet.fixture_start_date > datetime.utcnow():
                 bet_stop_response = client.betting.bet_request_stop(
                     bet_request_id=bet.bet_request_id,
-                    stop_bet_reason="The bet was too good!"
+                    stop_bet_reason="The bet was too good!",
                 )
                 cancellation_responses.append(bet_stop_response)

@@ -42,12 +42,12 @@ class BaseEndpoint:
 
     def _request(
         self, method_uri: str, params: dict = None, authenticated: bool = False
-    ) -> (dict, float):
+    ) -> Tuple[requests.Response, dict, float]:
         """
         :param str method_uri: uri to be used, defined by each function.
         :param dict params: Query Params to be used in request
         :param bool authenticated: If the request requires the user to be logged in
-
+        :return: tuple of the Response, dict (json_dict), float (elapsed time)
         """
         params = params if params else {}
 
@@ -70,17 +70,18 @@ class BaseEndpoint:
             raise APIError(None, uri, params, e)
         elapsed_time = time.time() - time_sent
 
-        response_json = self._load_content(response)
+        response_json = self.load_json_content(response)
 
         return response, response_json, elapsed_time
 
     def _post(
         self, method_uri: str, data: dict, authenticated: bool = True
-    ) -> (dict, float):
+    ) -> Tuple[requests.Response, dict, float]:
         """
         :param str method_uri: uri to be used, defined by each function.
         :param dict data: body of data
         :param bool authenticated: If the request requires the user to be logged in
+        :return: tuple of the Response, dict (json_dict), float (elapsed time)
         """
         uri = self.client.uri + method_uri
         time_sent = time.time()
@@ -100,15 +101,17 @@ class BaseEndpoint:
             raise APIError(None, uri, data, e)
         elapsed_time = time.time() - time_sent
 
-        response_json = self._load_content(response)
+        response_json = self.load_json_content(response)
 
         return response, response_json, elapsed_time
 
-    def _patch(self, method_uri: str, data: dict) -> (dict, float):
+    def _patch(
+        self, method_uri: str, data: dict
+    ) -> Tuple[requests.Response, dict, float]:
         """
         :param str method_uri: uri to be used, defined by each function.
         :param dict data: body of data
-
+        :return: tuple of the Response, dict (json_dict), float (elapsed time)
         """
         uri = self.client.uri + method_uri
         time_sent = time.time()
@@ -128,12 +131,13 @@ class BaseEndpoint:
             raise APIError(None, uri, data, e)
         elapsed_time = time.time() - time_sent
 
-        response_json = self._load_content(response)
+        response_json = self.load_json_content(response)
 
         return response, response_json, elapsed_time
 
-    def _process_request_exception(
-        self, response: requests.Response, response_json: dict
+    @staticmethod
+    def process_request_exception(
+        response: requests.Response, response_json: dict
     ) -> resources.BaseRequestException:
         logger.exception(
             f"Issue with request for: {response.url}, message: {response_json.get('message')}"
@@ -144,12 +148,13 @@ class BaseEndpoint:
             status_code=response.status_code,
         )
 
-    def _check_bet_request_id(self, bet_request_id: UUID):
+    @staticmethod
+    def check_bet_request_id(bet_request_id: UUID):
         if isinstance(bet_request_id, UUID) is False:
             raise Exception(f"Incorrect UUID supplied for the bet_request_id")
 
-    # noinspection PyMethodMayBeStatic
-    def _load_content(self, response: requests.Response):
+    @staticmethod
+    def load_json_content(response: requests.Response):
         if response.headers["content-type"] in [
             "application/json",
             "application/json; charset=utf-8",
@@ -165,8 +170,17 @@ class BaseEndpoint:
         resource: Type[BaseResource],
         elapsed_time: float,
     ) -> Union[BaseResource, dict, list, resources.BaseRequestException]:
+        """
+        Process the endpoint function responses from betconnect, parsing the data to the relevant resources
+        :param response: The request response
+        :param response_json: The json data from the response
+        :param resource: The resource to parse to the data too
+        :param elapsed_time: The time taken to make the request
+        :return: A resource for the response data or a BaseRequestException if BetConnect has detected an issue with
+        the request.
+        """
 
-        if self._check_status_code(response):
+        if self.check_status_code(response):
             if "data" in response_json:
                 data = response_json["data"]
 
@@ -194,15 +208,16 @@ class BaseEndpoint:
                 raise Exception("Expected response json to contain data key")
 
         else:
-            return self._process_request_exception(response, response_json)
+            return self.process_request_exception(response, response_json)
 
     def _put(
         self, method_uri: str, data: dict, authenticated: bool = True
-    ) -> (dict, float):
+    ) -> Tuple[requests.Response, dict, float]:
         """
         :param str method_uri: uri to be used, defined by each function.
         :param dict data: body of data
         :param bool authenticated: If the request requires the user to be logged in
+        :return: tuple of the Response, dict (json_dict), float (elapsed time)
         """
         uri = self.client.uri + method_uri
         time_sent = time.time()
@@ -222,14 +237,17 @@ class BaseEndpoint:
             raise APIError(None, uri, data, e)
         elapsed_time = time.time() - time_sent
 
-        response_json = self._load_content(response)
+        response_json = self.load_json_content(response)
 
         return response, response_json, elapsed_time
 
-    # noinspection PyMethodMayBeStatic
-    def _check_status_code(self, response: Response, codes: List[int] = None):
+    @staticmethod
+    def check_status_code(response: Response, codes: List[int] = None) -> bool:
         """
-        valid status codes {200, 400, 404}
+        Checks the reponse for valid status codes. Valid status codes {200} + supplied codes
+        :param response: A response resource (from the request)
+        :param codes: A list of accepted codes
+        :return: A bool validating the code
         """
         codes = codes if codes else []
         return (

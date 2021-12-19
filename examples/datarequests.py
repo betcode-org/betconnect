@@ -16,12 +16,11 @@ client = APIClient(
     password=config("STAGING_BETCONNECT_PASSWORD"),
     api_key=config("STAGING_BETCONNECT_API_KEY"),
     environment=Environment.STAGING,
+    personalised_production_url=config("PRODUCTION_URI"),
 )
 
 # login
 client.account.login()
-
-client.account.refresh_session_token()
 
 
 # get active book makers
@@ -91,7 +90,7 @@ active_selections = client.betting.active_selections(
 handicap_active_selections = client.betting.active_selections(
     fixture_id=active_fixtures[-1].fixture_id,
     market_type_id=win_market_type.market_type_id,
-    handicap=True
+    handicap=True,
 )
 
 # get selections and prices for an active market

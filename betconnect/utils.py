@@ -1,6 +1,6 @@
 from __future__ import annotations
 import hashlib
-from typing import List,Union, TYPE_CHECKING
+from typing import List, Union, TYPE_CHECKING
 from uuid import UUID
 
 if TYPE_CHECKING:
@@ -34,13 +34,14 @@ def is_valid_uuid(uuid_to_test, version=4):
         return False
     return str(uuid_obj) == uuid_to_test
 
+
 def calculate_book_percentage(
     market_selections: List[SelectionsForMarket],
 ) -> float:
     """
-    Return
+    Calculates the book % for a given market and runner
     :param List[SelectionsForMarket] market_selections: List of available selections for the market
-    :return:
+    :return: A float value. Anything close to 1.0 is good. Anything 1.1-1.15 is a large markup
     """
 
     book_value = 0
@@ -51,18 +52,17 @@ def calculate_book_percentage(
                     book_value += 1 / selection.max_price
     return book_value
 
-def parse_bet_request_id(bet_request_id: Union[str,UUID, UUID])->UUID:
+
+def parse_bet_request_id(bet_request_id: Union[str, UUID]) -> UUID:
+    """
+    Parses a string or UUID to a UUID
+    :param bet_request_id: a string or UUID
+    :return: a UUID valid for a bet_request_id
+    """
     if isinstance(bet_request_id, UUID):
         return bet_request_id
     elif isinstance(bet_request_id, str):
         return UUID(bet_request_id)
-
-
-
-
-
-
-
 
 
 def create_cheap_hash(txt: str, length: int = 15) -> str:

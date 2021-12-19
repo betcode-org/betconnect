@@ -24,8 +24,9 @@ class BaseClient:
         :param username: your betconnect username (string)
         :param password: your betconnect password (string)
         :param api_key: your betconnect api key (string)
+        :param personalised_production_url: A production user supplied url. (account manager will supply this)
         :param environment: the environment endpoint you want to send requests to (enum Environment)
-        :param session: Session object used in request default None. Session created if None with auth and headers handled.
+        :param session: Session object used in request default None.Session created if None with auth and headers handled.
         """
         self._username = username
         self._password = password
@@ -50,7 +51,7 @@ class BaseClient:
         return self._username
 
     @property
-    def api_version(self)->str:
+    def api_version(self) -> str:
         return self._api_version
 
     @property
@@ -91,7 +92,7 @@ class BaseClient:
     def set_account_balance(self, account_balance: resources.Balance) -> None:
         """
         Sets the account balance for easy access on the client. This is only accurate upto the last time it was updated.
-        :param account_balance: The account balance resource
+        :param account_balance: The account Balance resource
         :return: None
         """
         self._account_balance = account_balance
@@ -103,7 +104,7 @@ class BaseClient:
     ) -> None:
         """
         Sets the users account perferences to the client for easy access. User to determined user_id.
-        :param account_preferences:
+        :param account_preferences: An AccountPreferences resource. Contains user account data like user_id.
         :return: None
         """
         self._account_preferences = account_preferences
@@ -111,7 +112,7 @@ class BaseClient:
             raise exceptions.GamStopException()
         logger.info(f"Account preferences updated")
 
-    def _update_client_session(self, session: Union[None, Session] = None)->None:
+    def _update_client_session(self, session: Union[None, Session] = None) -> None:
         """
         Updates the client session with auth details
         :param session: a request Session
@@ -132,7 +133,7 @@ class BaseClient:
     def _set_endpoint_uris(self, environment: Environment):
         """
         Sets the uri for which requests are sent to
-        :param environment: enum Environment
+        :param environment: enum Environment {STAGING,PRODUCTION}
         :return: None
         """
         if environment == Environment.PRODUCTION:
@@ -151,7 +152,7 @@ class BaseClient:
     def process_login(self, token: str):
         """
         Processes the login, adding the token to the session header and setting login datetimes
-        :param token:
+        :param token: string token value supplied by BetConnect on login / token refresh
         :return: None
         """
         self.login_date = datetime.utcnow()

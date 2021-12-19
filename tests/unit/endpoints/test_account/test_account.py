@@ -49,8 +49,8 @@ class TestAccount:
         mock_account_endpoint: Account,
         mock_login_response: Tuple[Response, Dict[str, Any], float],
         mock_login_failure_response: Tuple[Response, Dict[str, Any], float],
-            mock_account_preferences_resource,
-            mock_balance_resource,
+        mock_account_preferences_resource,
+        mock_balance_resource,
     ):
         login_request = mocker.patch(
             "betconnect.endpoints.account.Account._post",

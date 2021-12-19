@@ -1,6 +1,6 @@
 from .baseresource import BaseResource
 from pydantic import Field, validator
-from typing import Union, List, Optional, Set
+from typing import Union, List, Optional
 import logging
 from betconnect import resources
 from betconnect.utils import is_valid_uuid
@@ -34,9 +34,7 @@ class GetBetRequestFilter(Filter):
 
     # noinspection PyMethodParameters
     @validator("bet_request_id", pre=True)
-    def validate_bet_request_id(
-        cls, v: Union[UUID, Optional[str]]
-    ) -> Optional[UUID]:
+    def validate_bet_request_id(cls, v: Union[UUID, Optional[str]]) -> Optional[UUID]:
         if isinstance(v, UUID):
             return v
         elif v:
@@ -72,9 +70,39 @@ class CreateBetRequestFilter(Filter):
         else:
             return v
 
+    @validator("customer_strategy_ref", pre=True)
+    def parse_customer_strategy_ref(
+        cls, v: Union[str, resources.CustomerStrategyRef]
+    ) -> resources.CustomerStrategyRef:
+        if isinstance(v, resources.CustomerStrategyRef):
+            return v
+        return resources.CustomerStrategyRef.create_customer_strategy_ref(
+            customer_strategy_ref=v
+        )
+
+    @validator("customer_order_ref", pre=True)
+    def parse_customer_order_ref(
+        cls, v: Union[str, resources.CustomerOrderRef]
+    ) -> resources.CustomerOrderRef:
+        if isinstance(v, resources.CustomerOrderRef):
+            return v
+        return resources.CustomerOrderRef.create_customer_order_ref(
+            customer_order_ref=v
+        )
+
     def generate_request_data(self, *args, **kwargs) -> dict:
         data = self.dict(exclude_none=kwargs["exclude_none"])
-        data["customer_order_ref"] = data["customer_order_ref"]["customer_order_ref"] if data["customer_order_ref"] else None
-        data["customer_strategy_ref"] = data["customer_strategy_ref"]["customer_strategy_ref"] if data["customer_strategy_ref"] else None
+        if "customer_order_ref" in data:
+            data["customer_order_ref"] = data["customer_order_ref"][
+                "customer_order_ref"
+            ]
+        else:
+            data["customer_order_ref"] = None
+        if "customer_strategy_ref" in data:
+            data["customer_strategy_ref"] = data["customer_strategy_ref"][
+                "customer_strategy_ref"
+            ]
+        else:
+            data["customer_strategy_ref"] = None
 
         return data

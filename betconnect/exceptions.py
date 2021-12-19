@@ -16,7 +16,7 @@ class BetConnectException(Exception):
 class InValidPersonalisedProductionURL(BetConnectException):
     def __init__(self, url: str):
         """
-        Raise when the supplied personalised betconnect url doesnt match the required pattern
+        Raise when the supplied personalised betconnect url does not match the required pattern
         :param url: The supplied URL
         """
         super(InValidPersonalisedProductionURL, self).__init__(url)
@@ -106,7 +106,7 @@ class MinOddException(BetConnectException):
 
     def __init__(self, min_odds: float):
         """
-        Raise when the user supplies an odd less then the site minimum
+        Raised when the user supplies an odd less than the site minimum
         :param min_odds:
         """
         super(MinOddException, self).__init__(min_odds)
@@ -118,7 +118,7 @@ class MinOddException(BetConnectException):
 
 class BetRequestIDFormatException(BetConnectException):
     """
-    Exception raised when the format doesnt match a valid UUID format.
+    Exception raised when the format does not match a valid UUID format.
     i.e. 'c9bf9e57-1685-4c89-bafb-ff5af830be8a'
     """
 

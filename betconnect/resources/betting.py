@@ -98,7 +98,7 @@ class CustomerStrategyRef(BaseResource):
                 logger.warning(
                     f"customer_strategy_ref contains spaces. These have been removed"
                 )
-            if utils.is_valid_customer_strategy_ref(customer_strategy_ref=v):
+            if cls.is_valid_customer_strategy_ref(customer_strategy_ref=v):
                 return v
 
             raise exceptions.BetRequestInvalidCustomerStrategyRefFormatException(
@@ -427,7 +427,7 @@ class MyActiveBet(BaseResource):
     bet_created: int
     bet_request_id: UUID
     bet_request_status_id: int
-    bet_request_user_id: str
+    bet_request_user_id: UUID  # TODO is thos a UUID?
     bet_type_name: str
     competition_name: str
     count_in_place: int = Field(default=None)  # TODO check type
@@ -603,8 +603,8 @@ class SelectionsForMarket(BaseResource):
 
 
 class Viewed(BaseResource):
-    prev: str
-    next: str
+    prev: UUID
+    next: UUID
 
     def __repr__(self) -> str:
         return f"Prev: {self.prev}->Next: {self.next}"

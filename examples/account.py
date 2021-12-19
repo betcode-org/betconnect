@@ -16,10 +16,11 @@ client = APIClient(
     password=config("STAGING_BETCONNECT_PASSWORD"),
     api_key=config("STAGING_BETCONNECT_API_KEY"),
     environment=Environment.STAGING,
+    personalised_production_url=config("PRODUCTION_URI"),
 )
 
 # login
-client.account.login()
+login = client.account.login()
 
 # get account balance
 balance = client.account.get_balance()

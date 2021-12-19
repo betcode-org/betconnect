@@ -5,11 +5,11 @@ from .baseendpoint import BaseEndpoint
 import logging
 from betconnect import exceptions
 from uuid import UUID
+
 logger = logging.getLogger(__name__)
 
 
 class Betting(BaseEndpoint):
-
     def active_bookmakers(self) -> List[resources.ActiveBookmaker]:
         """
         Returns a list of active sports
@@ -31,7 +31,7 @@ class Betting(BaseEndpoint):
         """
         Gets a list of active sports
         :param with_bets: boolean value (True, False). Returns the number of active bet_request available for each sport
-        :return: List of active sports
+        :return: List of ActiveSport
         """
 
         (response, response_json, elapsed_time) = self._request(
@@ -49,7 +49,7 @@ class Betting(BaseEndpoint):
         """
         Gets the active regions for a sport
         :param sport_id: The sport ID
-        :return: List of active regions
+        :return: List of ActiveRegion
         """
 
         (response, response_json, elapsed_time) = self._request(
@@ -70,7 +70,7 @@ class Betting(BaseEndpoint):
         Returns a list of active competitions for a given sport id and region id
         :param int sport_id: The sport ID
         :param int region_id: The region ID
-        :return: List of ActiveBookmaker
+        :return: List of ActiveCompetition
         """
 
         (response, response_json, elapsed_time) = self._request(
@@ -92,7 +92,7 @@ class Betting(BaseEndpoint):
         :param sport_id: The sport ID
         :param region_id: The region ID
         :param competition_id: The competition ID
-        :return: List of active fixtures
+        :return: List of ActiveFixture
         """
         if competition_id:
             assert region_id is not None
@@ -112,7 +112,7 @@ class Betting(BaseEndpoint):
         """
         Gets the active market type for a sport
         :param sport_id: The sport ID
-        :return: List of active market types
+        :return: List of ActiveMarketType
         """
 
         (response, response_json, elapsed_time) = self._request(
@@ -133,7 +133,7 @@ class Betting(BaseEndpoint):
         Gets a list of active markets for the fixture
         :param fixture_id: The fixture ID
         :param grouped: boolean value to determine whether the response should be grouped
-        :return: List of active markets
+        :return: List of ActiveMarket
         """
 
         (response, response_json, elapsed_time) = self._request(
@@ -155,7 +155,7 @@ class Betting(BaseEndpoint):
         :param fixture_id: The fixture ID
         :param market_type_id: The market type ID
         :param handicap: boolean handicap value (True, False)
-        :return: List of active selections
+        :return: List of ActiveSelection
         """
         (response, response_json, elapsed_time) = self._request(
             method_uri=f"{self.api_version}/active_selections/{fixture_id}/{market_type_id}{f'/{handicap}' if handicap is not None else ''}"
@@ -174,7 +174,7 @@ class Betting(BaseEndpoint):
         """
         Creates a bet (Authenticated)
         :param request_filter: The bet create filter
-        :return: a successful bet create response or an exception
+        :return: a successful BetRequestCreate resource or an BaseRequestException when BetConnect detects an issue.
         """
 
         (response, response_json, elapsed_time) = self._post(
@@ -195,7 +195,7 @@ class Betting(BaseEndpoint):
         """
         Gets a bet request for the given filter
         :param request_filter: A bet request filter, either enter a bet request id or other filter values
-        :return: A bet request resource or a request exception resource
+        :return: A bet BetRequest resource or an BaseRequestException when BetConnect detects an issue.
         """
 
         if request_filter.bet_request_id:
@@ -227,7 +227,14 @@ class Betting(BaseEndpoint):
     def selections_for_market(
         self, fixture_id: int, market_type_id: int, top_price_only: bool = False
     ) -> Union[resources.BaseRequestException, List[resources.SelectionsForMarket]]:
-
+        """
+        Returns the selection for a given market with their prices. This method is the fastest way to get selections
+        and prices in few requests.
+        :param fixture_id: The fixture ID
+        :param market_type_id: the market type ID
+        :param top_price_only: a bool value that represents whether to only return the top value
+        :return: A List of SelectionsForMarket resources or an BaseRequestException when BetConnect detects an issue.
+        """
         (response, response_json, elapsed_time) = self._request(
             method_uri=f"{self.api_version}/selections_for_market/{fixture_id}/{market_type_id}{f'/top_price_only'if top_price_only else ''}"
         )
@@ -246,13 +253,16 @@ class Betting(BaseEndpoint):
         A request to match for part or all of an active bet request.
         :param bet_request_id: The bet request ID
         :param accepted_stake: the target stake you would like to match
-        :return: A bet request match resource or a request exception resource
+        :return: A BetRequestMatch resource or an BaseRequestException when BetConnect detects an issue.
         """
-        self._check_bet_request_id(bet_request_id=bet_request_id)
+        self.check_bet_request_id(bet_request_id=bet_request_id)
 
         (response, response_json, elapsed_time) = self._patch(
             method_uri=f"{self.api_version}/bet_request_match",
-            data={"bet_request_id": str(bet_request_id), "accepted_stake": accepted_stake},
+            data={
+                "bet_request_id": str(bet_request_id),
+                "accepted_stake": accepted_stake,
+            },
         )
 
         return self.process_response(
@@ -266,12 +276,13 @@ class Betting(BaseEndpoint):
         self, bet_request_id: UUID, requested_stake: float
     ) -> Union[resources.BetRequestMatchMore, resources.BaseRequestException]:
         """
-        Allows you to match a bet request fully (up to the maximum liability allowed for a single bet) and request more of that bet until no liability is left.
+        Allows you to match a bet request fully (up to the maximum liability allowed for a single bet)
+        and request more of that bet until no liability is left.
         :param bet_request_id: The bet request ID
         :param requested_stake: The requested stake
-        :return: A bet request match more resource or a request exception resource
+        :return: A BetRequestMatchMore resource or an BaseRequestException when BetConnect detects an issue.
         """
-        self._check_bet_request_id(bet_request_id=bet_request_id)
+        self.check_bet_request_id(bet_request_id=bet_request_id)
 
         (response, response_json, elapsed_time) = self._patch(
             method_uri=f"{self.api_version}/bet_request_match_more",
@@ -294,14 +305,17 @@ class Betting(BaseEndpoint):
         """
         Stops an active bet request
         :param bet_request_id: The bet request ID
-        :param stop_bet_reason: optional reason
-        :return: A bet request stop response message
+        :param stop_bet_reason: optional reason (i.e. 'no longer value')
+        :return: A BetRequestStop resource or an BaseRequestException when BetConnect detects an issue.
         """
-        self._check_bet_request_id(bet_request_id=bet_request_id)
+        self.check_bet_request_id(bet_request_id=bet_request_id)
 
         (response, response_json, elapsed_time) = self._post(
             method_uri=f"{self.api_version}/bet_request_stop",
-            data={"bet_request_id": str(bet_request_id), "stop_bet_reason": stop_bet_reason},
+            data={
+                "bet_request_id": str(bet_request_id),
+                "stop_bet_reason": stop_bet_reason,
+            },
             authenticated=True,
         )
 
@@ -319,7 +333,7 @@ class Betting(BaseEndpoint):
         Gets active bet requests, taking into account pagination
         :param limit: Limit the number of active bets returned
         :param page: The page starting number
-        :return: An active bet request resource or request exception resource
+        :return: A ActiveBetRequests resource or an BaseRequestException when BetConnect detects an issue.
         """
         if (page is not None) or (limit is not None):
             limit = (
@@ -352,9 +366,17 @@ class Betting(BaseEndpoint):
         competitor: str,
         handicap: float = None,
     ) -> List[resources.Price]:
+        """
+        Returns a set of prices for a given fixture, market type and competition.
+        :param fixture_id: The fixture ID
+        :param market_type_id: the market type ID
+        :param competitor: the compeitor string
+        :param handicap: handicap value
+        :return: A List of Price resources
+        """
 
         (response, response_json, elapsed_time) = self._request(
-            method_uri=f"{self.api_version}/{fixture_id}/{market_type_id}/{competitor}{f'/handicap' if handicap is not None else ''}"
+            method_uri=f"{self.api_version}/prices/{fixture_id}/{market_type_id}/{competitor}{f'/handicap' if handicap is not None else ''}"
         )
 
         return self.process_response(
@@ -377,7 +399,7 @@ class Betting(BaseEndpoint):
         :param side: BetSide enum - either back or lay
         :param limit: Limit the number of bets returned
         :param page: The page number to start from
-        :return: return a bet history resource
+        :return: A BetHistoryRequest resource or an BaseRequestException when BetConnect detects an issue.
         """
         if (page is not None) or (limit is not None):
             limit = (
@@ -406,8 +428,14 @@ class Betting(BaseEndpoint):
     def get_viewed_next_page(
         self, bet_request_id: UUID, sport_id: int = None
     ) -> Union[resources.Viewed, resources.BaseRequestException]:
-
-        self._check_bet_request_id(bet_request_id=bet_request_id)
+        """
+        Returns the next bet request available to be viewed. (mprefered approach is to use bet_request_get
+        with a wide filter instead)
+        :param bet_request_id: The bet request ID
+        :param sport_id: the sport ID
+        :return: A Viewed resource or an BaseRequestException when BetConnect detects an issue.
+        """
+        self.check_bet_request_id(bet_request_id=bet_request_id)
 
         (response, response_json, elapsed_time) = self._request(
             method_uri=f"{self.api_version}/get_viewed_next_prev/{str(bet_request_id)}{f'/{sport_id}'if sport_id is not None else ''}"
@@ -430,6 +458,17 @@ class Betting(BaseEndpoint):
         get_all: str = None,
         customer_strategy_ref: str = None,
     ) -> Union[resources.MyBetsBetRequests, resources.BaseRequestException]:
+        """
+        Returns a list of MyBets allowing for per strategy recall of bets
+        :param side: the side of the bet, enum value BACK and LAY
+        :param status: The bet request status, enum values ACTIVE and SETTLED
+        :param user_id: The user_id, optional will try to get this from the user preference which is called on login.
+        :param limit: Limit the number of bets coming back.
+        :param page: T page number for (pagination)
+        :param get_all: string value to return all values with the above limit and page
+        :param customer_strategy_ref: The customer strategy ref which has been attached to any bet requests
+        :return: A MyBetsBetRequests resource or an BaseRequestException when BetConnect detects an issue.
+        """
 
         if user_id is None:
             if self.client.user_id:
@@ -490,7 +529,7 @@ class Betting(BaseEndpoint):
         Matched betting premium product only. Premuim subscription required.
         client.account_preferences.is_premium_subscriber ==1.
         :param bet_request_id: The bet request ID
-        :param bet_status_id: The status Id of the bet
+        :param bet_status_id: The status ID of the bet
         :param allocated_stake:
         :return: LockBet
         """

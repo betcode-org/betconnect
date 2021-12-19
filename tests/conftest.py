@@ -25,7 +25,11 @@ def mock_base_client() -> BaseClient:
 @pytest.fixture
 def mock_api_client() -> APIClient:
     return APIClient(
-        username="test", password="123", api_key="456", environment=Environment.STAGING
+        username="test",
+        password="123",
+        api_key="456",
+        environment=Environment.STAGING,
+        personalised_production_url=config("PRODUCTION_URI"),
     )
 
 
@@ -36,6 +40,7 @@ def staging_api_client() -> APIClient:
         password=config("STAGING_BETCONNECT_PASSWORD"),
         api_key=config("STAGING_BETCONNECT_API_KEY"),
         environment=Environment.STAGING,
+        personalised_production_url=config("PRODUCTION_URI"),
     )
 
 
@@ -46,6 +51,7 @@ def staging_lay_api_client() -> APIClient:
         password=config("STAGING_BETCONNECT_LAY_PASSWORD"),
         api_key=config("STAGING_BETCONNECT_LAY_API_KEY"),
         environment=Environment.STAGING,
+        personalised_production_url=config("PRODUCTION_URI"),
     )
 
 
@@ -344,6 +350,23 @@ def mock_get_balance_response(
 
 
 @pytest.fixture()
+def mock_my_bets_pkl() -> Response:
+    return load_pickle(build_path("resources/endpoints/betting/my_bets_response.pkl"))
+
+
+@pytest.fixture()
+def mock_my_bets_json() -> Dict[str, Any]:
+    return load_json(build_path("resources/endpoints/betting/my_bets_response.json"))
+
+
+@pytest.fixture()
+def mock_my_bets_response(
+    mock_my_bets_pkl: Response, mock_my_bets_json: Dict[str, Any]
+) -> Tuple[Response, Dict[str, Any], float]:
+    return mock_my_bets_pkl, mock_my_bets_json, 1.0
+
+
+@pytest.fixture()
 def mock_prices_pkl() -> Response:
     return load_pickle(build_path("resources/endpoints/betting/prices_response.pkl"))
 
@@ -511,13 +534,25 @@ def mock_get_viewed_next_page_response(
 
 
 @pytest.fixture()
-def mock_status_pkl() -> Response:
-    return load_pickle(build_path("resources/endpoints/login/mock_status.pkl"))
+def mock_selections_for_market_pkl() -> Response:
+    return load_pickle(
+        build_path("resources/endpoints/betting/selections_for_market_response.pkl")
+    )
 
 
 @pytest.fixture()
-def mock_status_json() -> Dict[str, Any]:
-    return load_json(build_path("resources/endpoints/login/mock_status.json"))
+def mock_selections_for_market_json() -> Dict[str, Any]:
+    return load_json(
+        build_path("resources/endpoints/betting/selections_for_market_response.json")
+    )
+
+
+@pytest.fixture()
+def mock_selections_for_market_response(
+    mock_selections_for_market_pkl: Response,
+    mock_selections_for_market_json: Dict[str, Any],
+) -> Tuple[Response, Dict[str, Any], float]:
+    return mock_selections_for_market_pkl, mock_selections_for_market_json, 1.0
 
 
 """

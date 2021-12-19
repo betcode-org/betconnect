@@ -1,11 +1,9 @@
 import logging
 from decouple import config
-from betconnect import enums
 from betconnect import resources
 from betconnect.resources import filters
 from betconnect.apiclient import APIClient
 from betconnect.enums import Environment
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +18,7 @@ client = APIClient(
     password=config("STAGING_BETCONNECT_PASSWORD"),
     api_key=config("STAGING_BETCONNECT_API_KEY"),
     environment=Environment.STAGING,
+    personalised_production_url=config("PRODUCTION_URI"),
 )
 
 # login
@@ -34,11 +33,7 @@ for active_sport in active_sports:
     if active_sport.bets_available > 0:
 
         bet_request_get = client.betting.bet_request_get(
-            request_filter=filters.GetBetRequestFilter(
-                sport_id = active_sport.sport_id
-            )
+            request_filter=filters.GetBetRequestFilter(sport_id=active_sport.sport_id)
         )
         if isinstance(bet_request_get, resources.BetRequest):
             market_bet_request.append(bet_request_get)
-
-

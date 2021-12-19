@@ -1,6 +1,6 @@
 from betconnect.apiclient import APIClient
 from decouple import config
-from betconnect.enums import Environment, BetStatus
+from betconnect.enums import Environment
 from betconnect import resources
 from betconnect import enums
 from betconnect import utils
@@ -19,6 +19,7 @@ client = APIClient(
     password=config("STAGING_BETCONNECT_PASSWORD"),
     api_key=config("STAGING_BETCONNECT_API_KEY"),
     environment=Environment.STAGING,
+    personalised_production_url=config("PRODUCTION_URI"),
 )
 
 # login
@@ -42,7 +43,9 @@ my_bets = client.betting.my_bets(
 # Get a specific bet request
 bet_request = client.betting.bet_request_get(
     request_filter=resources.GetBetRequestFilter(
-        bet_request_id=utils.parse_bet_request_id("45e1a024-523a-4b25-a33d-4466775d0aac")
+        bet_request_id=utils.parse_bet_request_id(
+            "45e1a024-523a-4b25-a33d-4466775d0aac"
+        )
     )
 )
 
