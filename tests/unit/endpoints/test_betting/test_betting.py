@@ -389,5 +389,25 @@ class TestBetting:
         assert isinstance(next_page, resources.Viewed)
         request.assert_called()
 
+    def test__is_line_market(
+        self,
+        mock_betting_endpoint: Betting,
+        mock_selections_for_market_line_market_response: Tuple[
+            Response, Dict[str, Any], float
+        ],
+        mock_selections_for_market_response: Tuple[Response, Dict[str, Any], float],
+    ):
+        assert mock_betting_endpoint._is_line_market(
+            mock_selections_for_market_line_market_response[0],
+            mock_selections_for_market_line_market_response[1],
+        )
+        assert (
+            mock_betting_endpoint._is_line_market(
+                mock_selections_for_market_response[0],
+                mock_selections_for_market_response[1],
+            )
+            is False
+        )
+
     def test_lock_bet(self):
         raise NotImplementedError

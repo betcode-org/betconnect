@@ -544,3 +544,41 @@ class TestBettingResources:
             exceptions.BetRequestInvalidCustomerStrategyRefFormatException
         ):
             resources.CustomerStrategyRef.create_customer_strategy_ref("")
+
+    def test_line_markets_selections_for_market(self):
+        line_markets = resources.LineMarketsSelectionsForMarket(
+            name="Over/Under (1.5)",
+            display_name="Over/Under (1.5)",
+            handicap="1.5",
+            line_data=[
+                {
+                    "source_fixture_id": "8172709",
+                    "source_market_id": "102340516",
+                    "source_market_type_id": "259",
+                    "source_selection_id": "308656048",
+                    "trading_status": "Trading",
+                    "name": "Over 1.5",
+                    "outcome": "Over",
+                    "ut": "2021-12-19 04:56:46.590564",
+                    "handicap": 1.5,
+                    "order": 1,
+                    "prices": [
+                        {
+                            "price": "6.00",
+                            "numerator": "5",
+                            "denominator": "1",
+                            "bookmakers": [
+                                {"id": "6006", "name": "Coral"},
+                                {"id": "17", "name": "Ladbrokes"},
+                            ],
+                        }
+                    ],
+                }
+            ],
+        )
+        assert line_markets.name == "Over/Under (1.5)"
+        assert line_markets.display_name == "Over/Under (1.5)"
+        assert line_markets.handicap == "1.5"
+        assert isinstance(line_markets.line_data, list)
+        for market in line_markets.line_data:
+            assert isinstance(market, resources.SelectionsForMarket)

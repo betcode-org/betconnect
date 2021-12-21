@@ -20,4 +20,7 @@ class BaseResource(BaseModel):
     # helper function for backwards compatibility ?
     @classmethod
     def create_from_dict(cls, d):
-        return cls.parse_obj(d)
+        if "line" in d:
+            return cls.parse_obj(d["line"])
+        else:
+            return cls.parse_obj(d)

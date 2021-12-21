@@ -185,15 +185,15 @@ class BaseEndpoint:
                 data = response_json["data"]
 
                 logger.debug(
-                    "It took {} s to request the data for url {}".format(
-                        elapsed_time, response.url
-                    )
+                    f"It took {elapsed_time} s to request the data for url {response.url}"
                 )
 
                 if isinstance(data, dict):
                     return resource.create_from_dict(data)
                 elif isinstance(data, list):
-                    return [resource(**r) for r in data]
+                    if len(data) == 0:
+                        logger.info(f"No data could be found for {response.url}")
+                    return [resource.create_from_dict(r) for r in data]
                 else:
                     raise Exception(
                         "Unkown response data type"

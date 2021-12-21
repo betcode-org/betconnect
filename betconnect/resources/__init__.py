@@ -27,6 +27,7 @@ from .betting import (
     CustomerOrderRef,
     CustomerStrategyRef,
     LockBet,
+    LineMarketsSelectionsForMarket,
 )
 from .filters import Filter, GetBetRequestFilter, CreateBetRequestFilter
 

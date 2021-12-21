@@ -14,4 +14,13 @@ from .exceptions import (
     BetRequestInvalidCustomerStrategyRefFormatException,
 )
 
-from .enums import Environment, BetStatus
+from .enums import (
+    Environment,
+    BetStatus,
+    BetSide,
+    BetRequestStatus,
+    MarketStatus,
+    TradingStatus,
+)
+
+from .apiclient import APIClient

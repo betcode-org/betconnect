@@ -50,7 +50,7 @@ def calculate_book_percentage(
             if selection.max_price:
                 if selection.max_price > 1.01:
                     book_value += 1 / selection.max_price
-    return book_value
+    return round(book_value, 3)
 
 
 def parse_bet_request_id(bet_request_id: Union[str, UUID]) -> UUID:

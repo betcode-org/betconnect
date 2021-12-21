@@ -367,6 +367,32 @@ def mock_my_bets_response(
 
 
 @pytest.fixture()
+def mock_selections_for_market_line_market_pkl() -> Response:
+    return load_pickle(
+        build_path("resources/endpoints/betting/selections_for_market_line_market.pkl")
+    )
+
+
+@pytest.fixture()
+def mock_selections_for_market_line_market_json() -> Dict[str, Any]:
+    return load_json(
+        build_path("resources/endpoints/betting/selections_for_market_line_market.json")
+    )
+
+
+@pytest.fixture()
+def mock_selections_for_market_line_market_response(
+    mock_selections_for_market_line_market_pkl: Response,
+    mock_selections_for_market_line_market_json: Dict[str, Any],
+) -> Tuple[Response, Dict[str, Any], float]:
+    return (
+        mock_selections_for_market_line_market_pkl,
+        mock_selections_for_market_line_market_json,
+        1.0,
+    )
+
+
+@pytest.fixture()
 def mock_prices_pkl() -> Response:
     return load_pickle(build_path("resources/endpoints/betting/prices_response.pkl"))
 

@@ -261,7 +261,7 @@ class ActiveFixture(BaseResource):
     display_name: str
     start_date: datetime = Field(alias="startdate")
     time: str
-    each_way_active: str
+    each_way_active: str = Field(default=None)
 
     # waiting on sport_id: int ?
     # waiting on region_id: int ?
@@ -585,10 +585,10 @@ class SelectionsForMarket(BaseResource):
     source_selection_id: str
     trading_status: str
     name: str
-    competitor_id: str
+    competitor_id: str = Field(default=None)
     ut: datetime
     order: int
-    max_price: float
+    max_price: float = Field(default=None)
     prices: List[Price]
 
     # noinspection PyMethodParameters
@@ -600,6 +600,13 @@ class SelectionsForMarket(BaseResource):
             return v
         else:
             raise TypeError(f"Expected value of type str or datetime")
+
+
+class LineMarketsSelectionsForMarket(BaseResource):
+    name: str
+    display_name: str
+    handicap: str
+    line_data: List[SelectionsForMarket]
 
 
 class Viewed(BaseResource):

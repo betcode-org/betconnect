@@ -3,6 +3,14 @@
 Release History
 ---------------
 
+0.0.4 (21-12-2021)
++++++++++++++++++++
+**Line Markets Bug fix**
+
+- fix for line markets selections_for_market #9
+- handicap param changed to string on active_selections & prices methods
+
+
 0.0.3 (19-12-2021)
 +++++++++++++++++++
 **ApiClient Changes (Breaking Changes)**

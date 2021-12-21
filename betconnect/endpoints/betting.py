@@ -1,4 +1,5 @@
 from typing import Union, List
+import requests
 from betconnect import enums
 from betconnect import resources
 from .baseendpoint import BaseEndpoint
@@ -154,7 +155,7 @@ class Betting(BaseEndpoint):
         Gets active selections for a given fixture and market type
         :param fixture_id: The fixture ID
         :param market_type_id: The market type ID
-        :param handicap: boolean handicap value (True, False)
+        :param handicap: string handicap value. example '4.5'
         :return: List of ActiveSelection
         """
         (response, response_json, elapsed_time) = self._request(
@@ -224,6 +225,23 @@ class Betting(BaseEndpoint):
             elapsed_time=elapsed_time,
         )
 
+    def _is_line_market(self, response: requests.Response, response_json: dict) -> bool:
+        """
+        Function to check whether the market is a line market returned from BetConnect
+        :param response: A response resource return from BetConnect
+        :param response_json: The response json containing thee data
+        :return: A boolean {True, False} as whether it is a Line market
+        """
+        if self.check_status_code(response):
+            if "data" in response_json:
+                data = response_json["data"]
+
+                if isinstance(data, list):
+                    if data:
+                        return True if "line" in data[0] else False
+
+        return False
+
     def selections_for_market(
         self, fixture_id: int, market_type_id: int, top_price_only: bool = False
     ) -> Union[resources.BaseRequestException, List[resources.SelectionsForMarket]]:
@@ -238,13 +256,21 @@ class Betting(BaseEndpoint):
         (response, response_json, elapsed_time) = self._request(
             method_uri=f"{self.api_version}/selections_for_market/{fixture_id}/{market_type_id}{f'/top_price_only'if top_price_only else ''}"
         )
-
-        return self.process_response(
-            response=response,
-            response_json=response_json,
-            resource=resources.SelectionsForMarket,
-            elapsed_time=elapsed_time,
-        )
+        # Check is response a line market
+        if self._is_line_market(response=response, response_json=response_json):
+            return self.process_response(
+                response=response,
+                response_json=response_json,
+                resource=resources.LineMarketsSelectionsForMarket,
+                elapsed_time=elapsed_time,
+            )
+        else:
+            return self.process_response(
+                response=response,
+                response_json=response_json,
+                resource=resources.SelectionsForMarket,
+                elapsed_time=elapsed_time,
+            )
 
     def bet_request_match(
         self, bet_request_id: UUID, accepted_stake: int
@@ -364,19 +390,19 @@ class Betting(BaseEndpoint):
         fixture_id: int,
         market_type_id: int,
         competitor: str,
-        handicap: float = None,
+        handicap: str = None,
     ) -> List[resources.Price]:
         """
         Returns a set of prices for a given fixture, market type and competition.
         :param fixture_id: The fixture ID
         :param market_type_id: the market type ID
         :param competitor: the compeitor string
-        :param handicap: handicap value
+        :param handicap: handicap string value (If the market type is a handicap market a handicap is required)
         :return: A List of Price resources
         """
 
         (response, response_json, elapsed_time) = self._request(
-            method_uri=f"{self.api_version}/prices/{fixture_id}/{market_type_id}/{competitor}{f'/handicap' if handicap is not None else ''}"
+            method_uri=f"{self.api_version}/prices/{fixture_id}/{market_type_id}/{competitor.lower()}{f'/{handicap}' if handicap is not None else ''}"
         )
 
         return self.process_response(
