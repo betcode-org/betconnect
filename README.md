@@ -1,7 +1,7 @@
 # betconnect
 
 Simple python wrapper for the [Betconnect](https://developer.betconnect.com/) api, allowing for retriveal of data for active 
-betting markets and betting opperations associated with those markets, see [examples](https://github.com/varneyo/betconnect/tree/master/examples)
+betting markets and betting operations associated with those markets, see [examples](https://github.com/varneyo/betconnect/tree/master/examples)
 
 
 # client requirements
@@ -9,7 +9,7 @@ betting markets and betting opperations associated with those markets, see [exam
 - betconnect account (client required username & password) - can be set up via the [staging](https://staging.betconnect.com/) and [production](https://www.betconnect.com/) websites. 
 
 - api key - the api key associated with you account. Unique per environment. 
-- personalised production url - live (production) account have unqiue urls associated with your account. 
+- personalised production url - live (production) accounts have unqiue urls associated with your account. 
 
 ### Using the library
 ```python

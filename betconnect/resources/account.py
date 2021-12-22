@@ -43,7 +43,7 @@ class AccountPreferences(BaseResource):
     gamstop_result: str
     kyc_result: int
     last_login: datetime
-    locality: str
+    locality: str = Field(default=None)
     marketing_terms_accepted: int
     odds_format_decimal: int
     page_size: int

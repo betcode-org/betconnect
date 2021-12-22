@@ -87,12 +87,6 @@ active_selections = client.betting.active_selections(
     market_type_id=win_market_type.market_type_id,
 )
 
-handicap_active_selections = client.betting.active_selections(
-    fixture_id=active_fixtures[-1].fixture_id,
-    market_type_id=win_market_type.market_type_id,
-    handicap=True,
-)
-
 # get selections and prices for an active market
 selections_for_market = client.betting.selections_for_market(
     fixture_id=active_fixtures[-1].fixture_id,

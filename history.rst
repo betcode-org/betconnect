@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+0.0.5 (21-12-2021)
++++++++++++++++++++
+**Resource update**
+
+- locality nullable
+
 0.0.4 (21-12-2021)
 +++++++++++++++++++
 **Line Markets Bug fix**

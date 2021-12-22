@@ -107,7 +107,7 @@ for competition in active_competitions:
             try:
                 handicap_market = [
                     m for m in active_markets if m.is_handicap == "True"
-                ][-2]
+                ][0]
                 handicap_active_selections = client.betting.active_selections(
                     fixture_id=active_fixture.fixture_id,
                     market_type_id=active_market.market_type_id,
