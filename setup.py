@@ -9,7 +9,7 @@ with open(os.path.join(os.path.dirname(__file__), "requirements.txt")) as f:
 
 setup(
     name="betconnect",
-    version="0.0.5",
+    version="0.0.6",
     packages=find_packages(),
     description="A betconnect API client",
     long_description=long_description,

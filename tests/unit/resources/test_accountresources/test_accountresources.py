@@ -19,7 +19,7 @@ class TestAccountResources:
             address_line_1="1 London Road",
             address_line_3="London",
             address_updated="2021-06-16 05:52:24",
-            admin_area="London",
+            admin_area=None,
             betconnect_pro=10,
             building=1,
             can_set_custom_odds=0,
@@ -56,7 +56,7 @@ class TestAccountResources:
         assert account_preferences.address_line_2 is None
         assert account_preferences.address_line_3 == "London"
         assert isinstance(account_preferences.address_updated, datetime)
-        assert account_preferences.admin_area == "London"
+        assert account_preferences.admin_area is None
         assert account_preferences.betconnect_pro == 10
         assert account_preferences.building == 1
         assert account_preferences.can_set_custom_odds == 0

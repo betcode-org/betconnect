@@ -19,7 +19,7 @@ class APIClient(BaseClient):
         APIClient is used to make request to the betconnect API
         :param username: your betconnect username (string)
         :param password: your betconnect password (string)
-        :param api_key: your betconnect api key (string)+
+        :param api_key: your betconnect api key (string)
         :param personalised_production_url: A production user supplied url. (account manager will supply this)
         :param environment: the environment endpoint you want to send requests to (enum Environment)
         :param session: Session object used in request default None. Session created if None with auth and headers handled.

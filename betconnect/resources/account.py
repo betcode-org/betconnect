@@ -24,7 +24,7 @@ class AccountPreferences(BaseResource):
     address_line_2: str = Field(default=None)
     address_line_3: str = Field(default=None)
     address_updated: datetime
-    admin_area: Optional[str]
+    admin_area: Optional[str] = None
     betconnect_pro: int
     building: int
     can_set_custom_odds: int
