@@ -1,7 +1,7 @@
 from .baseresource import BaseResource
 from datetime import datetime
 from pydantic import validator, Field
-
+from typing import Optional
 
 class Token(BaseResource):
     token: str
@@ -24,7 +24,7 @@ class AccountPreferences(BaseResource):
     address_line_2: str = Field(default=None)
     address_line_3: str = Field(default=None)
     address_updated: datetime
-    admin_area: str
+    admin_area: Optional[str]
     betconnect_pro: int
     building: int
     can_set_custom_odds: int
