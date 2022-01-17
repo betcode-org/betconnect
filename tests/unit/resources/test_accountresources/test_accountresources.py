@@ -19,7 +19,7 @@ class TestAccountResources:
             address_line_1="1 London Road",
             address_line_3="London",
             address_updated="2021-06-16 05:52:24",
-            admin_area=None,
+            admin_area="London",
             betconnect_pro=10,
             building=1,
             can_set_custom_odds=0,
@@ -56,7 +56,7 @@ class TestAccountResources:
         assert account_preferences.address_line_2 is None
         assert account_preferences.address_line_3 == "London"
         assert isinstance(account_preferences.address_updated, datetime)
-        assert account_preferences.admin_area is None
+        assert account_preferences.admin_area == "London"
         assert account_preferences.betconnect_pro == 10
         assert account_preferences.building == 1
         assert account_preferences.can_set_custom_odds == 0
@@ -90,3 +90,44 @@ class TestAccountResources:
         assert account_preferences.user_id == "a6a1gb91-6217-4e0d-b759-fbcaasb7a8ac"
         assert account_preferences.username == "jbob"
         assert account_preferences.is_premium_subscriber == 0
+
+        account_preferences = resources.AccountPreferences(
+            address_created="2021-06-16 05:52:24",
+            address_line_1="1 London Road",
+            address_updated="2021-06-16 05:52:24",
+            admin_area=None,
+            betconnect_pro=10,
+            building=1,
+            can_set_custom_odds=0,
+            city="London",
+            contact_number="11111111111",
+            country="United Kingdom",
+            country_iso2="GB",
+            country_iso3="GBR",
+            created="2021-06-16 05:52:24",
+            default_home_page="dashboard",
+            dob="2000-01-01",
+            email="testemail@gmail.com",
+            forename="Jim",
+            full_name="Jim Bob",
+            gamstop_result="N",
+            kyc_result=1,
+            last_login="2021-12-18 12:10:57",
+            locality=None,
+            marketing_terms_accepted=0,
+            odds_format_decimal=0,
+            page_size=25,
+            pending_withdrawal=0,
+            postcode="N1",
+            seed_pro=0,
+            surname="Bob",
+            thoroughfare="London Road",
+            user_category_id=1,
+            user_id="a6a1gb91-6217-4e0d-b759-fbcaasb7a8ac",
+            username="jbob",
+            is_premium_subscriber=0,
+        )
+        assert account_preferences.address_line_2 is None
+        assert account_preferences.address_line_3 is None
+        assert account_preferences.admin_area is None
+        assert account_preferences.locality is None
