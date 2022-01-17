@@ -387,7 +387,7 @@ class BetRequestMatch(BaseResource):
 class BetHistory(BaseResource):
     bet_request_id: UUID
     bet_request_status: str
-    bet_type_name: str
+    bet_type_name: str = Field(default=None)
     competition_name: str
     create_at: datetime = Field(default=None)
     each_way_factor: str = Field(default=None)
@@ -427,17 +427,17 @@ class MyActiveBet(BaseResource):
     bet_created: int
     bet_request_id: UUID
     bet_request_status_id: int
-    bet_request_user_id: UUID  # TODO is thos a UUID?
-    bet_type_name: str
+    bet_request_user_id: UUID
+    bet_type_name: str = Field(default=None)
     competition_name: str
     count_in_place: int = Field(default=None)  # TODO check type
     customer_order_ref: CustomerOrderRef = Field(default=None)
     customer_strategy_ref: CustomerStrategyRef = Field(default=None)
-    each_way_factor: str = Field(default=None)  # todo check type
+    each_way_factor: int = Field(default=None)
     fill_percentage: float
     fixture_name: str
     fixture_start_date: datetime = Field(alias="fixture_startdate")
-    handicap: str = Field(default=None)  # TODO check type
+    handicap: str = Field(default=None)
     market_name: str
     matched_stake: int
     price: Price
@@ -512,7 +512,7 @@ class MyBetsBetRequests(BaseResource):
 
 class ActiveBet(BaseResource):
     bet_request_id: UUID
-    bet_type_name: str
+    bet_type_name: str = Field(default=None)
     competition_name: str
     created_at: datetime
     customer_order_ref: CustomerOrderRef = Field(default=None)
