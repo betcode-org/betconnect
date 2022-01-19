@@ -53,3 +53,4 @@ bet_request = client.betting.bet_request_get(
 historical_bets = client.betting.bet_history(
     side=enums.BetSide.BACK, status=enums.BetRequestStatus.SETTLED
 )
+pass
