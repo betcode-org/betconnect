@@ -21,10 +21,10 @@ class Login(BaseResource):
 class AccountPreferences(BaseResource):
     address_created: datetime
     address_line_1: str
-    address_line_2: str = Field(default=None)
-    address_line_3: str = Field(default=None)
+    address_line_2: Optional[str] = Field(default=None)
+    address_line_3: Optional[str] = Field(default=None)
     address_updated: datetime
-    admin_area: str = Field(default=None)
+    admin_area: Optional[str] = Field(default=None)
     betconnect_pro: int
     building: int
     can_set_custom_odds: int
@@ -35,7 +35,7 @@ class AccountPreferences(BaseResource):
     country_iso3: str
     created: datetime
     default_home_page: str
-    display_name: str = Field(default=None)
+    display_name: Optional[str] = Field(default=None)
     dob: str
     email: str
     forename: str
@@ -43,14 +43,14 @@ class AccountPreferences(BaseResource):
     gamstop_result: str
     kyc_result: int
     last_login: datetime
-    locality: str = Field(default=None)
+    locality: Optional[str] = Field(default=None)
     marketing_terms_accepted: int
     odds_format_decimal: int
     page_size: int
     pending_withdrawal: int
-    pending_withdrawal_amount: float = Field(default=None)
+    pending_withdrawal_amount: Optional[float] = Field(default=None)
     postcode: str
-    premise: str = Field(default=None)
+    premise: Optional[str] = Field(default=None)
     seed_pro: int
     surname: str
     thoroughfare: str

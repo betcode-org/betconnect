@@ -33,4 +33,3 @@ client.account.refresh_session_token()
 
 # logout of client
 client.account.logout()
-pass

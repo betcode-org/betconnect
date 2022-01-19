@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.0.7 (18-01-2022)
++++++++++++++++++++
+**Resource updates**
+
+- typing improvements
+
+
 0.0.5 (21-12-2021)
 +++++++++++++++++++
 **Resource update**

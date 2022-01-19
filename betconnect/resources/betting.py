@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class CustomerOrderRef(BaseResource):
-    customer_order_ref: Optional[str]
+    customer_order_ref: Optional[str] = Field(default=None)
 
     @staticmethod
     def generate_random_order_ref() -> str:
@@ -59,7 +59,7 @@ class CustomerOrderRef(BaseResource):
 
 
 class CustomerStrategyRef(BaseResource):
-    customer_strategy_ref: Optional[str]
+    customer_strategy_ref: Optional[str] = Field(default=None)
 
     @staticmethod
     def is_valid_customer_strategy_ref(customer_strategy_ref: str) -> bool:
@@ -131,7 +131,7 @@ class ActiveSport(BaseResource):
     order: int
     active: int
     rate: float
-    bets_available: int = Field(default=None)
+    bets_available: Optional[int] = Field(default=None)
 
     def __repr__(self) -> str:
         return f"Sport: {self.display_name} ({self.id})"
@@ -140,7 +140,7 @@ class ActiveSport(BaseResource):
 class ActiveRegion(BaseResource):
     name: str
     region_id: int
-    iso: str = Field(default=None)
+    iso: Optional[str] = Field(default=None)
     order: int
 
     def __repr__(self) -> str:
@@ -178,7 +178,7 @@ class ActiveMarket(BaseResource):
     source_market_id: str
     market_type_id: int
     order: int
-    handicap: str = None
+    handicap: Optional[str] = Field(default=None)
     bet_types: List[str] = []
 
     # waiting on fixture_id: int
@@ -261,7 +261,7 @@ class ActiveFixture(BaseResource):
     display_name: str
     start_date: datetime = Field(alias="startdate")
     time: str
-    each_way_active: str = Field(default=None)
+    each_way_active: Optional[str] = Field(default=None)
 
     # waiting on sport_id: int ?
     # waiting on region_id: int ?
@@ -285,7 +285,7 @@ class BackersStats(BaseResource):
     strike_rate: float
     roi: float
     bet_requests: str
-    recent_performance: str = Field(default=None)
+    recent_performance: Optional[str] = Field(default=None)
 
     def __repr__(self) -> str:
         return f"Strike Rate: {self.strike_rate}, ROI: {self.roi}, Recent: {self.recent_performance}"
@@ -305,7 +305,7 @@ class BetRequest(BaseResource):
     market_type_id: int
     competitor: str
     bet_request_id: UUID
-    bet_type: str = Field(default=None)
+    bet_type: Optional[str] = Field(default=None)
     requested_stake: float
     liability: float
     locked_stake: float
@@ -374,11 +374,11 @@ class BetRequestCreate(BaseResource):
 class BetRequestMatch(BaseResource):
     matched: bool
     available: bool
-    bet_request_id: UUID = Field(default=None)
-    bet_id: str = Field(default=None)
-    bet_status: str = Field(default=None)
-    amount_matched: float = Field(default=None)
-    viewed: dict = Field(default=None)
+    bet_request_id: Optional[UUID] = Field(default=None)
+    bet_id: Optional[str] = Field(default=None)
+    bet_status: Optional[str] = Field(default=None)
+    amount_matched: Optional[float] = Field(default=None)
+    viewed: Optional[dict] = Field(default=None)
 
     def __repr__(self) -> str:
         return f"Bet: {str(self.bet_request_id)}, Matched: {self.matched}, Available: {self.available}"
@@ -387,20 +387,20 @@ class BetRequestMatch(BaseResource):
 class BetHistory(BaseResource):
     bet_request_id: UUID
     bet_request_status: str
-    bet_type_name: str = Field(default=None)
+    bet_type_name: Optional[str] = Field(default=None)
     competition_name: str
-    create_at: datetime = Field(default=None)
-    each_way_factor: str = Field(default=None)
+    create_at: Optional[datetime] = Field(default=None)
+    each_way_factor: Optional[str] = Field(default=None)
     fill_percentage: float
     fixture_name: str
     fixture_start_date: datetime = Field(alias="fixture_startdate")
-    handicap: float = Field(default=None)
+    handicap: Optional[float] = Field(default=None)
     market_name: str
     matched_stake: float
     price: float
     price_denominator: int
     price_numerator: int
-    region_iso: str = Field(default=None)
+    region_iso: Optional[str] = Field(default=None)
     region_name: str
     selection_name: str
     sport_name: str
@@ -422,30 +422,30 @@ class BetHistory(BaseResource):
 
 class MyActiveBet(BaseResource):
     actioned_at: datetime
-    adjustment: str = Field(default=None)  # TODO check type
-    adjustment_type: str = Field(default=None)  # TODO check type
+    adjustment: Optional[str] = Field(default=None)  # TODO check type
+    adjustment_type: Optional[str] = Field(default=None)  # TODO check type
     bet_created: int
     bet_request_id: UUID
     bet_request_status_id: int
     bet_request_user_id: UUID
-    bet_type_name: str = Field(default=None)
+    bet_type_name: Optional[str] = Field(default=None)
     competition_name: str
-    count_in_place: int = Field(default=None)  # TODO check type
-    customer_order_ref: CustomerOrderRef = Field(default=None)
-    customer_strategy_ref: CustomerStrategyRef = Field(default=None)
-    each_way_factor: int = Field(default=None)
+    count_in_place: Optional[int] = Field(default=None)  # TODO check type
+    customer_order_ref: Optional[CustomerOrderRef] = Field(default=None)
+    customer_strategy_ref: Optional[CustomerStrategyRef] = Field(default=None)
+    each_way_factor: Optional[int] = Field(default=None)
     fill_percentage: float
     fixture_name: str
     fixture_start_date: datetime = Field(alias="fixture_startdate")
-    handicap: str = Field(default=None)
+    handicap: Optional[str] = Field(default=None)
     market_name: str
     matched_stake: int
     price: Price
     profit: int
-    profit_loss: int = Field(default=None)
-    region_iso: str = Field(default=None)
+    profit_loss: Optional[int] = Field(default=None)
+    region_iso: Optional[str] = Field(default=None)
     region_name: str
-    result_type_name: str = Field(default=None)
+    result_type_name: Optional[str] = Field(default=None)
     selection_name: str
     sport_external_id: int
     sport_name: str
@@ -453,7 +453,7 @@ class MyActiveBet(BaseResource):
     stake: int
     status_name: str
     status_slug: str
-    sub_account_id: str = Field(default=None)  # TODO check type
+    sub_account_id: Optional[str] = Field(default=None)  # TODO check type
 
     # noinspection PyMethodParameters
     @validator("actioned_at", "fixture_start_date", pre=True)
@@ -512,17 +512,17 @@ class MyBetsBetRequests(BaseResource):
 
 class ActiveBet(BaseResource):
     bet_request_id: UUID
-    bet_type_name: str = Field(default=None)
+    bet_type_name: Optional[str] = Field(default=None)
     competition_name: str
     created_at: datetime
-    customer_order_ref: CustomerOrderRef = Field(default=None)
-    customer_strategy_ref: CustomerStrategyRef = Field(default=None)
-    each_way_factor: float = Field(default=None)
+    customer_order_ref: Optional[CustomerOrderRef] = Field(default=None)
+    customer_strategy_ref: Optional[CustomerStrategyRef] = Field(default=None)
+    each_way_factor: Optional[float] = Field(default=None)
     fill_percentage: float
-    fixture_id: int = Field(default=None)
+    fixture_id: Optional[int] = Field(default=None)
     fixture_name: str
     fixture_start_date: datetime = Field(alias="fixture_startdate")
-    handicap: float = Field(default=None)
+    handicap: Optional[float] = Field(default=None)
     market_name: str
     matched_stake: float
     price: float
@@ -585,10 +585,10 @@ class SelectionsForMarket(BaseResource):
     source_selection_id: str
     trading_status: str
     name: str
-    competitor_id: str = Field(default=None)
+    competitor_id: Optional[str] = Field(default=None)
     ut: datetime
     order: int
-    max_price: float = Field(default=None)
+    max_price: Optional[float] = Field(default=None)
     prices: List[Price]
 
     # noinspection PyMethodParameters
