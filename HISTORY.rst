@@ -9,6 +9,8 @@ Release History
 
 - betcode-org migration
 - __version__ added / setup updated
+- GitHub actions added
+- req-test added
 
 0.0.7 (18-01-2022)
 +++++++++++++++++++

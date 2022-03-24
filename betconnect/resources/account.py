@@ -3,6 +3,7 @@ from datetime import datetime
 from pydantic import validator, Field
 from typing import Optional
 
+
 class Token(BaseResource):
     token: str
 
