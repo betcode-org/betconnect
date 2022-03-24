@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.1.0 (24-03-2022)
++++++++++++++++++++
+**Improvements**
+
+- betcode-org migration
+- __version__ added / setup updated
+
 0.0.7 (18-01-2022)
 +++++++++++++++++++
 **Resource updates**

@@ -1,23 +1,29 @@
 import os
 from setuptools import setup, find_packages
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+here = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(os.path.dirname(__file__), "requirements.txt")) as f:
+with open(os.path.join(here, "README.md"), "r") as f:
+    long_description = f.read()
+
+with open(os.path.join(here, "requirements.txt"), "r") as f:
     INSTALL_REQUIRES = f.read().splitlines()
 
+about = {}
+with open(os.path.join(here, "betconnect", "__version__.py"), "r") as f:
+    exec(f.read(), about)
+
 setup(
-    name="betconnect",
-    version="0.0.7",
+    name=about["__title__"],
+    version=about["__version__"],
     packages=find_packages(),
-    description="A betconnect API client",
+    description=about["__description__"],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/varneyo/betconnect",
-    author="oliver Varney",
+    url=about["__url__"],
+    author=about["__author__"],
     author_email="oliverashleyvarney@gmail.com",
-    license="MIT",
+    license=about["__license__"],
     package_dir={"betconnect": "betconnect"},
     classifiers=[
         "License :: OSI Approved :: MIT License",
