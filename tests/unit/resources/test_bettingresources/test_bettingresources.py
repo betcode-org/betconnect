@@ -1,5 +1,5 @@
 from betconnect import resources
-from datetime import datetime
+from datetime import datetime, time
 import pytest
 from betconnect import exceptions
 from uuid import UUID
@@ -137,7 +137,8 @@ class TestBettingResources:
         assert active_fixture.fixture_id == 8757184
         assert active_fixture.display_name == "Kempton Park"
         assert isinstance(active_fixture.start_date, datetime)
-        assert active_fixture.time == "16:15"
+        assert active_fixture.time == time(16, 15)
+        assert active_fixture.start_date_time == datetime(2021, 12, 17, 16, 15)
         assert active_fixture.each_way_active == "1"
 
     def test_backers_stats(self):
