@@ -1,0 +1,23 @@
+site_name: betconnect
+site_description: A betconnect API client.
+
+theme:
+    name: 'material'
+    logo: images/logo.png
+    favicon: images/logo.png
+
+    palette:
+      primary: 'blue grey'
+      accent: 'amber'
+
+repo_name: betcode-org/betconnect
+repo_url: https://github.com/betcode-org/betconnect
+edit_uri: ""
+
+nav:
+    - Introduction: 'index.md'
+    - Help: 'help.md'
+
+markdown_extensions:
+  - admonition
+  - codehilite

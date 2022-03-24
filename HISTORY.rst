@@ -13,6 +13,7 @@ Release History
 - req-test added
 - MIT Licence added
 - ReadMe update
+- docs added
 
 0.0.7 (18-01-2022)
 +++++++++++++++++++
