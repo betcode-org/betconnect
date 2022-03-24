@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, time
 from typing import List, Optional
 from pydantic import Field, validator
 from .baseresource import BaseResource
@@ -260,12 +260,18 @@ class ActiveFixture(BaseResource):
     fixture_id: int
     display_name: str
     start_date: datetime = Field(alias="startdate")
-    time: str
+    time: time
     each_way_active: Optional[str] = Field(default=None)
 
     # waiting on sport_id: int ?
     # waiting on region_id: int ?
     # waiting on competition_id: int ?
+
+    @property
+    def start_date_time(self) -> datetime:
+        return self.start_date.replace(
+            hour=self.time.hour, minute=self.time.minute, second=self.time.second
+        )
 
     # noinspection PyMethodParameters
     @validator("start_date", pre=True)

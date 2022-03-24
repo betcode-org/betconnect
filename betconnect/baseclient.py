@@ -38,6 +38,7 @@ class BaseClient:
         self.login_date: Optional[datetime] = None
         self.login_expiry_check: Optional[datetime] = None
         self.next_refresh_time: Optional[datetime] = None
+        self.session_timeout: int = 8 * 60 * 60
         self._token: Optional[resources.Token] = None
         self._account_preferences: Optional[resources.AccountPreferences] = None
         self._account_balance: Optional[resources.Balance] = None
