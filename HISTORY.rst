@@ -3,6 +3,18 @@
 Release History
 ---------------
 
+0.1.0 (24-03-2022)
++++++++++++++++++++
+**Improvements**
+
+- betcode-org migration
+- __version__ added / setup updated
+- GitHub actions added
+- req-test added
+- MIT Licence added
+- ReadMe update
+- docs added
+
 0.0.7 (18-01-2022)
 +++++++++++++++++++
 **Resource updates**

@@ -1,7 +1,19 @@
+<p align="center">
+  <a href="https://github.com/betcode-org">
+    <img src="docs/images/logo-full.png" title="betcode-org">
+  </a>
+</p>
+
+![Build Status](https://github.com/betcode-org/betconnect/actions/workflows/test.yml/badge.svg) [![PyPI version](https://badge.fury.io/py/betconnect.svg)](https://pypi.python.org/pypi/betconnect) [![Downloads](https://pepy.tech/badge/betconnect)](https://pepy.tech/project/betconnect)
+
 # betconnect
 
-Simple python wrapper for the [Betconnect](https://developer.betconnect.com/) api, allowing for retriveal of data for active 
-betting markets and betting operations associated with those markets, see [examples](https://github.com/varneyo/betconnect/tree/master/examples)
+Simple python wrapper for the [BetConnect](https://developer.betconnect.com/) api, allowing for retriveal of data for active 
+betting markets and betting operations associated with those markets, see [examples](https://github.com/betcode-org/betconnect/tree/master/examples)
+
+[docs](https://betcode-org.github.io/betconnect/)
+
+[join betcode slack group](https://join.slack.com/t/betcode-org/shared_invite/zt-h0ato238-PPbfU_T7Ji0ORjz0ESIJkg)
 
 
 # client requirements
@@ -29,7 +41,5 @@ active_sports = client.betting.active_sports()
 ```
 
 Available endpoints:
-- client.[account](https://github.com/varneyo/betconnect/blob/master/betconnect/endpoints/account.py) - login, logout, account preferences
-- client.[betting](https://github.com/varneyo/betconnect/blob/master/betconnect/endpoints/betting.py) - find active sports, competitions, markets. Create and find bet requests.
-
-
+- client.[account](https://github.com/betcode-org/betconnect/blob/master/betconnect/endpoints/account.py) - login, logout, account preferences
+- client.[betting](https://github.com/betcode-org/betconnect/blob/master/betconnect/endpoints/betting.py) - find active sports, competitions, markets. Create and find bet requests.

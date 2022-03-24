@@ -1,0 +1,12 @@
+# Tests & Linting
+black==22.1.0
+pytest
+pytest-mock
+
+# Documentation
+mkdocs
+mkdocs-material
+
+# Packaging
+twine
+wheel

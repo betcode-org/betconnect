@@ -1,4 +1,7 @@
+import uuid
 from typing import Tuple, Dict, Any
+
+import pytest
 from pytest_mock import MockerFixture
 from requests import Response
 from betconnect import resources
@@ -409,5 +412,6 @@ class TestBetting:
             is False
         )
 
-    def test_lock_bet(self):
-        raise NotImplementedError
+    def test_lock_bet(self, mock_betting_endpoint):
+        with pytest.raises(NotImplementedError):
+            mock_betting_endpoint.lock_bet(uuid.uuid4(), 1, 1)

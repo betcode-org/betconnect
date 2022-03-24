@@ -1,3 +1,4 @@
+from .__version__ import __title__, __version__, __author__
 from .exceptions import (
     InValidPersonalisedProductionURL,
     UnknownBetConnectEnvironment,
