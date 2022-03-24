@@ -6,12 +6,21 @@ on:
   pull_request:
     branches: ["master", "release/*"]
 
+env:
+  PRODUCTION_URI: .betconnect.com/
+  STAGING_BETCONNECT_USERNAME: STAGING_BETCONNECT_USERNAME
+  STAGING_BETCONNECT_PASSWORD: STAGING_BETCONNECT_PASSWORD
+  STAGING_BETCONNECT_API_KEY: STAGING_BETCONNECT_API_KEY
+  STAGING_BETCONNECT_LAY_USERNAME: STAGING_BETCONNECT_LAY_USERNAME
+  STAGING_BETCONNECT_LAY_PASSWORD: STAGING_BETCONNECT_LAY_PASSWORD
+  STAGING_BETCONNECT_LAY_API_KEY: STAGING_BETCONNECT_LAY_API_KEY
+
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10']
 
     steps:
     - uses: actions/checkout@v2
