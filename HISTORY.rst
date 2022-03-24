@@ -11,6 +11,8 @@ Release History
 - __version__ added / setup updated
 - GitHub actions added
 - req-test added
+- MIT Licence added
+- ReadMe update
 
 0.0.7 (18-01-2022)
 +++++++++++++++++++

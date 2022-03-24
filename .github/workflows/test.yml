@@ -43,7 +43,7 @@ jobs:
       run: |
         black . --check
 
-    - name: Unittest
+    - name: pytest
       run: |
         python -m pytest
 
