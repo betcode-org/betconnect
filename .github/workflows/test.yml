@@ -47,11 +47,6 @@ jobs:
       run: |
         python -m pytest
 
-    - name: Coverage
-      run: |
-        coverage run -m pytest
-        coverage report
-
   deploy:
     needs: test
     runs-on: ubuntu-latest
