@@ -25,6 +25,7 @@ class TestBaseClient:
         assert client.login_date is None
         assert client.login_expiry_check is None
         assert client._token is None
+        assert client.session_timeout == 28800
 
     def test__update_client_session(self, mock_base_client):
         mock_base_client._update_client_session()
