@@ -590,12 +590,12 @@ class TestBettingResources:
                 customer_strategy_ref="111111111111111111111111111111111111111111111111111"
             )
 
-        customer_stratey_ref = resources.CustomerStrategyRef.create_customer_strategy_ref(
-            "1234"
+        customer_stratey_ref = (
+            resources.CustomerStrategyRef.create_customer_strategy_ref("1234")
         )
         assert customer_stratey_ref.customer_strategy_ref == "1234"
-        customer_stratey_ref = resources.CustomerStrategyRef.create_customer_strategy_ref(
-            "123 4"
+        customer_stratey_ref = (
+            resources.CustomerStrategyRef.create_customer_strategy_ref("123 4")
         )
         assert customer_stratey_ref.customer_strategy_ref == "1234"
 
