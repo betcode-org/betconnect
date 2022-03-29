@@ -120,7 +120,7 @@ for fixture in active_fixtures[-1:]:
                 )
 
             try:
-                best_price = [p for p in selection.prices][0]
+                best_price = [p for p in selection.prices][-1]
             except IndexError as e:
                 raise Exception(
                     f"No price was available for selection {selection.name}"
@@ -145,13 +145,6 @@ for fixture in active_fixtures[-1:]:
             )
             if isinstance(bet_create_response, resources.BetRequestCreate):
                 logger.info(f"Bet request was created!")
-
-                # get the previously created bet request
-                bet_request_get = client.betting.bet_request_get(
-                    request_filter=resources.GetBetRequestFilter(
-                        bet_request_id=bet_create_response.bet_request_id
-                    )
-                )
 
                 # Retrieve my bets
                 active_bet_request = client.betting.get_active_bet_requests()

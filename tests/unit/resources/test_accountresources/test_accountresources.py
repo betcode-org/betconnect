@@ -21,7 +21,7 @@ class TestAccountResources:
             address_updated="2021-06-16 05:52:24",
             admin_area="London",
             betconnect_pro=10,
-            building=1,
+            building="1",
             can_set_custom_odds=0,
             city="London",
             contact_number="11111111111",
@@ -58,7 +58,7 @@ class TestAccountResources:
         assert isinstance(account_preferences.address_updated, datetime)
         assert account_preferences.admin_area == "London"
         assert account_preferences.betconnect_pro == 10
-        assert account_preferences.building == 1
+        assert account_preferences.building == "1"
         assert account_preferences.can_set_custom_odds == 0
         assert account_preferences.city == "London"
         assert account_preferences.contact_number == "11111111111"
@@ -97,9 +97,7 @@ class TestAccountResources:
             address_updated="2021-06-16 05:52:24",
             admin_area=None,
             betconnect_pro=10,
-            building=1,
             can_set_custom_odds=0,
-            city="London",
             contact_number="11111111111",
             country="United Kingdom",
             country_iso2="GB",
@@ -121,7 +119,6 @@ class TestAccountResources:
             postcode="N1",
             seed_pro=0,
             surname="Bob",
-            thoroughfare="London Road",
             user_category_id=1,
             user_id="a6a1gb91-6217-4e0d-b759-fbcaasb7a8ac",
             username="jbob",
@@ -131,3 +128,6 @@ class TestAccountResources:
         assert account_preferences.address_line_3 is None
         assert account_preferences.admin_area is None
         assert account_preferences.locality is None
+        assert account_preferences.city is None
+        assert account_preferences.thoroughfare is None
+        assert account_preferences.building is None

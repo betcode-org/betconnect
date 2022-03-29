@@ -35,9 +35,7 @@ def is_valid_uuid(uuid_to_test, version=4):
     return str(uuid_obj) == uuid_to_test
 
 
-def calculate_book_percentage(
-    market_selections: List[SelectionsForMarket],
-) -> float:
+def calculate_book_percentage(market_selections: List[SelectionsForMarket]) -> float:
     """
     Calculates the book % for a given market and runner
     :param List[SelectionsForMarket] market_selections: List of available selections for the market

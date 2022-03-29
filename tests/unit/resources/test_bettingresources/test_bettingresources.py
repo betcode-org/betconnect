@@ -141,14 +141,6 @@ class TestBettingResources:
         assert active_fixture.start_date_time == datetime(2021, 12, 17, 16, 15)
         assert active_fixture.each_way_active == "1"
 
-    def test_backers_stats(self):
-        backers_stats = resources.BackersStats(
-            strike_rate=100.0, roi=10.0, bet_requests="1234"
-        )
-        assert backers_stats.strike_rate == 100.0
-        assert backers_stats.roi == 10.0
-        assert backers_stats.bet_requests == "1234"
-
     def test_bet_request(self):
         bet_request = resources.BetRequest(
             sport_name="Horse Racing",
@@ -199,7 +191,6 @@ class TestBettingResources:
         assert bet_request.requested_stake == 5.0
         assert bet_request.liability == 11.25
         assert bet_request.locked_stake == 0.0
-        assert isinstance(bet_request.backer_stats, resources.BackersStats)
         assert bet_request.others_viewing_bet == 0
         assert bet_request.lockable
 
@@ -599,12 +590,12 @@ class TestBettingResources:
                 customer_strategy_ref="111111111111111111111111111111111111111111111111111"
             )
 
-        customer_stratey_ref = (
-            resources.CustomerStrategyRef.create_customer_strategy_ref("1234")
+        customer_stratey_ref = resources.CustomerStrategyRef.create_customer_strategy_ref(
+            "1234"
         )
         assert customer_stratey_ref.customer_strategy_ref == "1234"
-        customer_stratey_ref = (
-            resources.CustomerStrategyRef.create_customer_strategy_ref("123 4")
+        customer_stratey_ref = resources.CustomerStrategyRef.create_customer_strategy_ref(
+            "123 4"
         )
         assert customer_stratey_ref.customer_strategy_ref == "1234"
 

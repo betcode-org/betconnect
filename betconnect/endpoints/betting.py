@@ -99,7 +99,7 @@ class Betting(BaseEndpoint):
             assert region_id is not None
 
         (response, response_json, elapsed_time) = self._request(
-            method_uri=f"{self.api_version}/active_fixtures/{sport_id}/{region_id if region_id else ''}{f'/{competition_id}' if competition_id is not None else ''}",
+            method_uri=f"{self.api_version}/active_fixtures/{sport_id}/{region_id if region_id else ''}{f'/{competition_id}' if competition_id is not None else ''}"
         )
 
         return self.process_response(
@@ -194,7 +194,10 @@ class Betting(BaseEndpoint):
         self, request_filter: resources.GetBetRequestFilter
     ) -> Union[resources.BaseRequestException, resources.BetRequest]:
         """
-        Gets a bet request for the given filter
+        Gets a bet request for the given filter.
+
+        This is other users bet requests (please use get_active_bet_requests / my_bets ) to get your own.
+
         :param request_filter: A bet request filter, either enter a bet request id or other filter values
         :return: A bet BetRequest resource or an BaseRequestException when BetConnect detects an issue.
         """

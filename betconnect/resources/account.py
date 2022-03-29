@@ -27,9 +27,9 @@ class AccountPreferences(BaseResource):
     address_updated: datetime
     admin_area: Optional[str] = Field(default=None)
     betconnect_pro: int
-    building: int
+    building: Optional[str] = Field(default=None)
     can_set_custom_odds: int
-    city: str
+    city: Optional[str] = Field(default=None)
     contact_number: str
     country: str
     country_iso2: str
@@ -54,7 +54,7 @@ class AccountPreferences(BaseResource):
     premise: Optional[str] = Field(default=None)
     seed_pro: int
     surname: str
-    thoroughfare: str
+    thoroughfare: Optional[str] = Field(default=None)
     user_category_id: int
     user_id: str
     username: str
