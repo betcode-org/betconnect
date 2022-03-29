@@ -20,7 +20,6 @@ from .betting import (
     Viewed,
     BetRequestMatchMore,
     PricesBookmaker,
-    BackersStats,
     MyActiveBet,
     MyBetsBetRequests,
     BetRequestStop,

@@ -798,11 +798,6 @@ def mock_active_fixture_resource() -> resources.ActiveFixture:
 
 
 @pytest.fixture()
-def mock_backers_stats_resource() -> resources.BackersStats:
-    return resources.BackersStats(strike_rate=100.0, roi=10.0, bet_requests="1234")
-
-
-@pytest.fixture()
 def mock_bet_request_resource() -> resources.BetRequest:
     return resources.BetRequest(
         sport_name="Horse Racing",
@@ -813,10 +808,7 @@ def mock_bet_request_resource() -> resources.BetRequest:
         fixture_name="Kempton Park",
         market_name="Race Winner",
         selection_name="Starter For Ten",
-        price={
-            "decimal": "3.25",
-            "fraction": {"numerator": "9", "denominator": "4"},
-        },
+        price={"decimal": "3.25", "fraction": {"numerator": "9", "denominator": "4"}},
         fixture_id=8757185,
         market_type_id=6,
         competitor="1207634",

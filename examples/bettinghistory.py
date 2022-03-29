@@ -40,14 +40,20 @@ my_bets = client.betting.my_bets(
 )
 
 
-# Get a specific bet request
-bet_request = client.betting.bet_request_get(
-    request_filter=resources.GetBetRequestFilter(
-        bet_request_id=utils.parse_bet_request_id(
-            "45e1a024-523a-4b25-a33d-4466775d0aac"
-        )
+# Retrieve my bets
+active_bet_request = client.betting.get_active_bet_requests()
+
+# retrieves strategy based bets
+for bets in active_bet_requests.bets:
+    # Get my bets
+    strategy_bet_requests = client.betting.my_bets(
+        side=enums.BetSide.BACK,
+        status=enums.BetRequestStatus.SETTLED,
+        limit=100,
+        page=0,
+        get_all="get_all",
+        customer_strategy_ref=bets.customer_strategy_ref,
     )
-)
 
 # Get historical bets
 historical_bets = client.betting.bet_history(

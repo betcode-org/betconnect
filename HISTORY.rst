@@ -3,6 +3,19 @@
 Release History
 ---------------
 
+0.1.2 (29-03-2022)
++++++++++++++++++++
+**Example Improvements**
+
+- dailyhorseracing - removed bet_request_get
+- bettinghistory - removed bet_request_get and added my_bets with customer_strategy_ref example
+
+**Bug Fixes**
+
+- #22 BackersStats - removed from API
+- #21 AccountPreferences - building, city, thoroughfare set to optional strings
+
+
 0.1.1 (24-03-2022)
 +++++++++++++++++++
 **Improvements**

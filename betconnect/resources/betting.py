@@ -287,16 +287,6 @@ class ActiveFixture(BaseResource):
         return f"Fixture: {self.display_name}({self.fixture_id}) {self.start_date}"
 
 
-class BackersStats(BaseResource):
-    strike_rate: float
-    roi: float
-    bet_requests: str
-    recent_performance: Optional[str] = Field(default=None)
-
-    def __repr__(self) -> str:
-        return f"Strike Rate: {self.strike_rate}, ROI: {self.roi}, Recent: {self.recent_performance}"
-
-
 class BetRequest(BaseResource):
     sport_name: str
     sport_id: str
@@ -315,19 +305,8 @@ class BetRequest(BaseResource):
     requested_stake: float
     liability: float
     locked_stake: float
-    backer_stats: BackersStats
     others_viewing_bet: int
     lockable: bool
-    # waiting on customer_order_ref: str = Field(default=None)
-    # waiting on customer_strategy_ref: str = Field(default=None)
-
-    # noinspection PyMethodParameters
-    @validator("backer_stats", pre=True)
-    def stats_parser(cls, v) -> BackersStats:
-        if isinstance(v, dict):
-            return BackersStats.create_from_dict(v)
-        else:
-            raise TypeError(f"Expected value of dict")
 
     # noinspection PyMethodParameters
     @validator("price", pre=True)
