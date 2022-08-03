@@ -96,13 +96,9 @@ class CreateBetRequestFilter(Filter):
             data["customer_order_ref"] = data["customer_order_ref"][
                 "customer_order_ref"
             ]
-        else:
-            data["customer_order_ref"] = None
         if "customer_strategy_ref" in data:
             data["customer_strategy_ref"] = data["customer_strategy_ref"][
                 "customer_strategy_ref"
             ]
-        else:
-            data["customer_strategy_ref"] = None
 
         return data
