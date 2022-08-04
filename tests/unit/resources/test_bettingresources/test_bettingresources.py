@@ -59,13 +59,19 @@ class TestBettingResources:
         assert active_competition.active == 1
         assert active_competition.order == 9999
 
-    def test_active_market_type(self):
+    def test_active_market_type_with_active(self):
         active_market_type = resources.ActiveMarketType(
             market_type_id=6, name="WIN", active=1
         )
         assert active_market_type.market_type_id == 6
         assert active_market_type.name == "WIN"
-        assert active_market_type.active == 1
+
+    def test_active_market_type_without_active(self):
+        active_market_type = resources.ActiveMarketType(
+            market_type_id=6, name="WIN"
+        )
+        assert active_market_type.market_type_id == 6
+        assert active_market_type.name == "WIN"
 
     def test_active_market(self):
         active_market = resources.ActiveMarket(
