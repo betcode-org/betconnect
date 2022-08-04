@@ -164,7 +164,6 @@ class ActiveCompetition(BaseResource):
 class ActiveMarketType(BaseResource):
     market_type_id: int
     name: str
-    active: int
 
     def __repr__(self) -> str:
         return f"Market Type: {self.name}({self.market_type_id})"
