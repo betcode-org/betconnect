@@ -257,7 +257,7 @@ class Betting(BaseEndpoint):
         :return: A List of SelectionsForMarket resources or an BaseRequestException when BetConnect detects an issue.
         """
         (response, response_json, elapsed_time) = self._request(
-            method_uri=f"{self.api_version}/selections_for_market/{fixture_id}/{market_type_id}{f'/top_price_only'if top_price_only else ''}"
+            method_uri=f"{self.api_version}/selections_for_market/{fixture_id}/{market_type_id}/{f'True'if top_price_only else 'False'}"
         )
         # Check is response a line market
         if self._is_line_market(response=response, response_json=response_json):
