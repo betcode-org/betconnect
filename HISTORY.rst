@@ -3,6 +3,13 @@
 Release History
 ---------------
 
+0.1.3 (09-08-2022)
++++++++++++++++++++
+**Bug Fixes**
+- #32 fixed the URL called for selections_for_market in betting.py
+- #28 remove sending of None in filters.py
+
+
 0.1.2 (29-03-2022)
 +++++++++++++++++++
 **Example Improvements**
