@@ -22,6 +22,7 @@ from .betting import (
     PricesBookmaker,
     MyActiveBet,
     MyBetsBetRequests,
+    MyBetsBets,
     BetRequestStop,
     CustomerOrderRef,
     CustomerStrategyRef,
