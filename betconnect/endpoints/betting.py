@@ -486,7 +486,11 @@ class Betting(BaseEndpoint):
         page: int = None,
         get_all: str = None,
         customer_strategy_ref: str = None,
-    ) -> Union[resources.MyBetsBetRequests, resources.MyBetsBets, resources.BaseRequestException]:
+    ) -> Union[
+        resources.MyBetsBetRequests,
+        resources.MyBetsBets,
+        resources.BaseRequestException,
+    ]:
         """
         Returns a list of MyBets allowing for per strategy recall of bets
         :param side: the side of the bet, enum value BACK and LAY
@@ -544,7 +548,7 @@ class Betting(BaseEndpoint):
             authenticated=True,
         )
 
-        if side.value == 'back':
+        if side.value == "back":
             return self.process_response(
                 response=response,
                 response_json=response_json,
