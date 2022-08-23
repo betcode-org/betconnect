@@ -2,6 +2,11 @@
 
 Release History
 ---------------
+0.1.4 (23-08-2022)
++++++++++++++++++++
+**Bug Fixes**
+- #36 fixed my_bets endpoint that only worked for back side bets due to one-sided field validation
+
 
 0.1.3 (09-08-2022)
 +++++++++++++++++++

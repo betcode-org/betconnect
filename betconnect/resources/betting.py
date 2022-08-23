@@ -478,6 +478,76 @@ class MyActiveBet(BaseResource):
         return f"Bet: {str(self.bet_request_id)}, Competition: {self.competition_name}, Selection: {self.selection_name},Price: {self.price}, Stake: {self.stake}, Profit: {self.profit}"
 
 
+class MyActiveLayBet(BaseResource):
+    actioned_at: datetime
+    adjustment: Optional[str] = Field(default=None)  # TODO check type
+    adjustment_type: Optional[str] = Field(default=None)  # TODO check type
+    bet_created: int
+    bet_request_id: UUID
+    bet_request_status_id: int
+    bet_type_name: Optional[str] = Field(default=None)
+    competition_name: str
+    count_in_place: Optional[int] = Field(default=None)  # TODO check type
+    customer_order_ref: Optional[CustomerOrderRef] = Field(default=None)
+    customer_strategy_ref: Optional[CustomerStrategyRef] = Field(default=None)
+    each_way_factor: Optional[int] = Field(default=None)
+    fixture_name: str
+    fixture_start_date: datetime = Field(alias="fixture_startdate")
+    handicap: Optional[str] = Field(default=None)
+    liability: int
+    market_name: str
+    price: Price
+    profit_loss: Optional[int] = Field(default=None)
+    region_iso: Optional[str] = Field(default=None)
+    region_name: str
+    result_type_name: Optional[str] = Field(default=None)
+    selection_name: str
+    sport_external_id: int
+    sport_name: str
+    sport_slug: str
+    stake: int
+    status_name: str
+    status_slug: str
+    sub_account_id: Optional[str] = Field(default=None)  # TODO check type
+
+    # noinspection PyMethodParameters
+    @validator("actioned_at", "fixture_start_date", pre=True)
+    def date_parser(cls, v) -> datetime:
+        if isinstance(v, str):
+            return datetime.fromisoformat(v)
+        elif isinstance(v, datetime):
+            return v
+        else:
+            raise TypeError(f"Expected value of type str or datetime")
+
+    # noinspection PyMethodParameters
+    @validator("customer_order_ref", pre=True)
+    def parse_customer_order_ref(cls, v) -> Optional[CustomerOrderRef]:
+        if v:
+            return CustomerOrderRef(customer_order_ref=v)
+
+    # noinspection PyMethodParameters
+    @validator("customer_strategy_ref", pre=True)
+    def parse_customer_strategy_ref(cls, v) -> Optional[CustomerStrategyRef]:
+        if v:
+            return CustomerStrategyRef(customer_strategy_ref=v)
+
+    # noinspection PyMethodParameters
+    @validator("price", pre=True)
+    def price_parser(cls, v) -> Price:
+        if isinstance(v, dict):
+            return Price(
+                price=v["decimal"],
+                numerator=v["fraction"]["numerator"],
+                denominator=v["fraction"]["denominator"],
+            )
+        else:
+            raise TypeError(f"Expected value of dict")
+
+    def __repr__(self) -> str:
+        return f"Bet: {str(self.bet_request_id)}, Competition: {self.competition_name}, Selection: {self.selection_name},Price: {self.price}, Stake: {self.stake}, Liability: {self.liability}"
+
+
 class BetRequestStop(BaseResource):
     pending: bool
 
@@ -487,6 +557,16 @@ class BetRequestStop(BaseResource):
 
 class MyBetsBetRequests(BaseResource):
     bets: List[MyActiveBet]
+    bets_active: int
+    last_page: int
+    total_bets: int
+
+    def __repr__(self) -> str:
+        return f"Bets Active: {self.bets_active}"
+
+
+class MyBetsBets(BaseResource):
+    bets: List[MyActiveLayBet]
     bets_active: int
     last_page: int
     total_bets: int
