@@ -16,7 +16,7 @@ class TestFilters:
         assert request_filter.horse_racing_regions == []
         assert request_filter.min_odds == 1.01
         assert request_filter.max_odds == 1000
-        assert request_filter.accept_each_way == 0
+        assert request_filter.accept_each_way == True
         assert request_filter.bet_request_id is None
 
         # test length == 36

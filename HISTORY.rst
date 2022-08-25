@@ -2,6 +2,14 @@
 
 Release History
 ---------------
+0.1.4 (25-08-2022)
++++++++++++++++++++
+**Bug Fixes**
+- #38 fixed bet_request_get endpoint which had a broken each_way_active filter that prevented users from viewing any
+  each-way bets.
+
+
+---------------
 0.1.4 (23-08-2022)
 +++++++++++++++++++
 **Bug Fixes**
