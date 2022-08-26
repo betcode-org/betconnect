@@ -216,10 +216,20 @@ class Betting(BaseEndpoint):
                 ),
             )
         else:
-            (response, response_json, elapsed_time) = self._post(
-                method_uri=f"{self.api_version}/bet_request_get",
-                data=request_filter.generate_request_data(exclude={"bet_request_id"}),
-            )
+            if request_filter.accept_each_way:
+                (response, response_json, elapsed_time) = self._post(
+                    method_uri=f"{self.api_version}/bet_request_get",
+                    data=request_filter.generate_request_data(
+                        exclude={"bet_request_id", "accept_each_way"}
+                    ),
+                )
+            else:
+                (response, response_json, elapsed_time) = self._post(
+                    method_uri=f"{self.api_version}/bet_request_get",
+                    data=request_filter.generate_request_data(
+                        exclude={"bet_request_id"}
+                    ),
+                )
 
         return self.process_response(
             response=response,

@@ -21,7 +21,7 @@ class GetBetRequestFilter(Filter):
     horse_racing_regions: List[int] = Field(default=[], alias="horseRacingRegions")
     min_odds: Optional[float] = Field(default=1.01)
     max_odds: Optional[float] = Field(default=1000)
-    accept_each_way: Optional[str] = Field(default=0)
+    accept_each_way: Optional[bool] = Field(default=True)
     bet_request_id: Optional[UUID] = Field(default=None)
 
     # noinspection PyMethodParameters
