@@ -652,7 +652,7 @@ class SelectionsForMarket(BaseResource):
     name: str
     competitor_id: Optional[str] = Field(default=None)
     ut: datetime
-    order: int
+    order: Optional[int] = Field(default=None)
     max_price: Optional[float] = Field(default=None)
     prices: List[Price]
 
