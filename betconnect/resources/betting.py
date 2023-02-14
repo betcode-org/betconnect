@@ -655,6 +655,7 @@ class SelectionsForMarket(BaseResource):
     order: Optional[int] = Field(default=None)
     max_price: Optional[float] = Field(default=None)
     prices: List[Price]
+    outcome: Optional[str] = Field(default=None)
 
     # noinspection PyMethodParameters
     @validator("ut", pre=True)
