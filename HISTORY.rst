@@ -2,6 +2,13 @@
 
 Release History
 ---------------
+0.1.6 (15-02-2022)
++++++++++++++++++++
+**Bug Fixes**
+- Add outcome field to SelectionsForMarket
+
+
+---------------
 0.1.5 (25-08-2022)
 +++++++++++++++++++
 **Bug Fixes**
