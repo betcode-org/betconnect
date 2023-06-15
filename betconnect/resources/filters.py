@@ -55,7 +55,7 @@ class CreateBetRequestFilter(Filter):
     market_type_id: int
     competitor: str
     price: float
-    stake: int
+    stake: float
     handicap: Optional[float] = Field(default=None)
     bet_type: str
     customer_strategy_ref: Optional[resources.CustomerStrategyRef] = Field(default=None)
@@ -63,8 +63,8 @@ class CreateBetRequestFilter(Filter):
 
     # noinspection PyMethodParameters
     @validator("stake", pre=True)
-    def validate_stake(cls, v) -> int:
-        if not isinstance(v, int) or v < config.SITE_MINIMUM_STAKE_SIZE:
+    def validate_stake(cls, v) -> float:
+        if v < config.SITE_MINIMUM_STAKE_SIZE:
             raise exceptions.BetRequestIDStakeSizeException(stake_size=v)
         else:
             return v
