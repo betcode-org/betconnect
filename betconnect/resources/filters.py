@@ -64,8 +64,7 @@ class CreateBetRequestFilter(Filter):
     # noinspection PyMethodParameters
     @validator("stake", pre=True)
     def validate_stake(cls, v) -> int:
-        assert isinstance(v, int)
-        if (v < 5) or (v % 5 != 0):
+        if not isinstance(v, int) or v < 1:
             raise exceptions.BetRequestIDStakeSizeException(stake_size=v)
         else:
             return v

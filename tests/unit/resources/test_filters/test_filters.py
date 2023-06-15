@@ -58,18 +58,18 @@ class TestFilters:
                 market_type_id=1,
                 competitor="123",
                 price=10,
-                stake=4,
+                stake=0,
                 bet_type="WIN",
             )
 
-        # test stake multiple validation
+        # test stake nultiples of 1
         with pytest.raises(exceptions.BetRequestIDStakeSizeException):
             resources.CreateBetRequestFilter(
                 fixture_id=1,
                 market_type_id=1,
                 competitor="123",
                 price=10,
-                stake=11,
+                stake=1.5,
                 bet_type="WIN",
             )
 
