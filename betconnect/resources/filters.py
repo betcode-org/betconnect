@@ -4,7 +4,7 @@ from typing import Union, List, Optional
 import logging
 from betconnect import resources
 from betconnect.utils import is_valid_uuid
-from betconnect import exceptions
+from betconnect import config, exceptions
 from uuid import UUID
 
 logger = logging.getLogger(__name__)
@@ -64,7 +64,7 @@ class CreateBetRequestFilter(Filter):
     # noinspection PyMethodParameters
     @validator("stake", pre=True)
     def validate_stake(cls, v) -> int:
-        if not isinstance(v, int) or v < 1:
+        if not isinstance(v, int) or v < config.SITE_MINIMUM_STAKE_SIZE:
             raise exceptions.BetRequestIDStakeSizeException(stake_size=v)
         else:
             return v
