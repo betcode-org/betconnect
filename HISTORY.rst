@@ -2,7 +2,14 @@
 
 Release History
 ---------------
-0.1.6 (15-02-2022)
+0.1.7 (15-06-2023)
++++++++++++++++++++
+**Improvements**
+- Relax staking limitations for backers, in line with changes on exhange
+- Allow creation of bet requests by selection id, more performant than fixture/market type/competitor combination (which is retained)
+
+
+0.1.6 (15-02-2023)
 +++++++++++++++++++
 **Bug Fixes**
 - Add outcome field to SelectionsForMarket
