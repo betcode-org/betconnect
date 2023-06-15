@@ -140,10 +140,7 @@ class BetRequestIDStakeSizeException(BetConnectException):
         self.stake_size = stake_size
 
     def __str__(self) -> str:
-        return (
-            f"Supplied stake size {self.stake_size} is not a multiple of {config.SITE_STAKE_SIZE_MULTIPLE_REQUIREMENT} "
-            f"greater than the site minimum of {config.SITE_MINIMUM_STAKE_SIZE}"
-        )
+        return f"Supplied stake size {self.stake_size} is not greater than the site minimum of {config.SITE_MINIMUM_STAKE_SIZE}"
 
 
 class BetRequestInvalidCustomerOrderRefFormatException(BetConnectException):
