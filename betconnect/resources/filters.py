@@ -9,6 +9,7 @@ from uuid import UUID
 
 logger = logging.getLogger(__name__)
 
+
 class Filter(BaseResource):
     def generate_request_data(self, *args, **kwargs) -> dict:
         raise NotImplementedError
@@ -18,6 +19,7 @@ class Filter(BaseResource):
             raise exceptions.BetRequestIDStakeSizeException(stake_size=v)
         else:
             return v
+
 
 class GetBetRequestFilter(Filter):
     sport_id: Optional[int] = Field(default=None)
@@ -53,6 +55,7 @@ class GetBetRequestFilter(Filter):
             data["bet_request_id"] = str(data["bet_request_id"])
         return data
 
+
 class CreateBetRequestBySelectionFilter(Filter):
     selection_id: int
     price: float
@@ -63,7 +66,7 @@ class CreateBetRequestBySelectionFilter(Filter):
     customer_order_ref: Optional[resources.CustomerOrderRef] = Field(default=None)
 
     # inherited size validator
-    _size = validator('stake', allow_reuse=True)(Filter.validate_stake)
+    _size = validator("stake", allow_reuse=True)(Filter.validate_stake)
 
     @validator("customer_strategy_ref", pre=True)
     def parse_customer_strategy_ref(
@@ -97,6 +100,7 @@ class CreateBetRequestBySelectionFilter(Filter):
             ]
 
         return data
+
 
 class CreateBetRequestByCompetitorFilter(Filter):
     fixture_id: int
@@ -110,7 +114,7 @@ class CreateBetRequestByCompetitorFilter(Filter):
     customer_order_ref: Optional[resources.CustomerOrderRef] = Field(default=None)
 
     # inherited size validator
-    _size = validator('stake', allow_reuse=True)(Filter.validate_stake)
+    _size = validator("stake", allow_reuse=True)(Filter.validate_stake)
 
     @validator("customer_strategy_ref", pre=True)
     def parse_customer_strategy_ref(
@@ -144,6 +148,7 @@ class CreateBetRequestByCompetitorFilter(Filter):
             ]
 
         return data
+
 
 # alias for backward compatibility
 CreateBetRequestFilter = CreateBetRequestByCompetitorFilter

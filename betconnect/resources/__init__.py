@@ -29,7 +29,13 @@ from .betting import (
     LockBet,
     LineMarketsSelectionsForMarket,
 )
-from .filters import Filter, GetBetRequestFilter, CreateBetRequestBySelectionFilter, CreateBetRequestByCompetitorFilter, CreateBetRequestFilter
+from .filters import (
+    Filter,
+    GetBetRequestFilter,
+    CreateBetRequestBySelectionFilter,
+    CreateBetRequestByCompetitorFilter,
+    CreateBetRequestFilter,
+)
 
 from .account import Login, Token, AccountPreferences
 
