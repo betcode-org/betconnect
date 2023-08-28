@@ -420,9 +420,13 @@ class MyActiveBet(BaseResource):
     customer_strategy_ref: Optional[CustomerStrategyRef] = Field(default=None)
     each_way_factor: Optional[int] = Field(default=None)
     fill_percentage: float
+    fixture_external_id: int
+    fixture_id: int
     fixture_name: str
     fixture_start_date: datetime = Field(alias="fixture_startdate")
     handicap: Optional[str] = Field(default=None)
+    market_external_id: int
+    market_id: int
     market_name: str
     matched_stake: int
     price: Price
@@ -431,6 +435,8 @@ class MyActiveBet(BaseResource):
     region_iso: Optional[str] = Field(default=None)
     region_name: str
     result_type_name: Optional[str] = Field(default=None)
+    selection_external_id: int
+    selection_id: int
     selection_name: str
     sport_external_id: int
     sport_name: str
