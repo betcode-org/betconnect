@@ -3,8 +3,8 @@ from pydantic import BaseModel
 
 class BaseResource(BaseModel):
     class Config:
-        allow_population_by_field_name = True
-        allow_mutation = True
+        populate_by_name = True
+        frozen = False
         allow = "allow"  # TODO should this be extra = 'allow'
 
     @property
