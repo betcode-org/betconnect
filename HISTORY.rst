@@ -2,6 +2,17 @@
 
 Release History
 ---------------
+
+0.2.0 (15-03-2023)
++++++++++++++++++++
+**Improvements**
+- Pin dependencies
+
+**Libraries**
+- pydantic upgraded to 2.6.4
+- requests<2.32.0
+- python-decouple upgraded to 3.8
+
 0.1.7 (15-06-2023)
 +++++++++++++++++++
 **Improvements**
@@ -15,7 +26,6 @@ Release History
 - Add outcome field to SelectionsForMarket
 
 
----------------
 0.1.5 (25-08-2022)
 +++++++++++++++++++
 **Bug Fixes**
@@ -23,7 +33,6 @@ Release History
   each-way bets.
 
 
----------------
 0.1.4 (23-08-2022)
 +++++++++++++++++++
 **Bug Fixes**

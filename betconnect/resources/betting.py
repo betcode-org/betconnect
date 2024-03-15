@@ -211,8 +211,8 @@ class PricesBookmaker(BaseResource):
 
 class Price(BaseResource):
     price: str
-    numerator: str
-    denominator: str
+    numerator: int
+    denominator: int
     bookmakers: List[PricesBookmaker] = Field(default=[])
 
     @classmethod

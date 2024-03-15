@@ -107,8 +107,8 @@ class TestBettingResources:
         )
 
         assert price.price == "10"
-        assert price.numerator == "10"
-        assert price.denominator == "1"
+        assert price.numerator == 10
+        assert price.denominator == 1
         assert price.bookmakers[0].id == "123"
         assert price.bookmakers[0].name == "Betfair"
 
