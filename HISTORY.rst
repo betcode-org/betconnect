@@ -9,6 +9,7 @@ Release History
 - Pin dependencies
 
 **Libraries**
+- py3.7 removed and 3.11 added
 - pydantic upgraded to 2.6.4
 - requests<2.32.0
 - python-decouple upgraded to 3.8
