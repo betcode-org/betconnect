@@ -1,6 +1,6 @@
 from .baseresource import BaseResource
 from datetime import datetime
-from pydantic import validator, Field
+from pydantic import field_validator, Field
 from typing import Optional
 
 
@@ -61,7 +61,7 @@ class AccountPreferences(BaseResource):
     is_premium_subscriber: int
 
     # noinspection PyMethodParameters
-    @validator("address_created", "address_updated", "created", pre=True)
+    @field_validator("address_created", "address_updated", "created", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)

@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, time
 from typing import List, Optional
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from .baseresource import BaseResource
 from uuid import UUID
 import logging
@@ -35,7 +35,7 @@ class CustomerOrderRef(BaseResource):
             customer_order_ref=customer_order_ref
         )
 
-    @validator("customer_order_ref", pre=True)
+    @field_validator("customer_order_ref", mode="before")
     def validate_customer_order_ref(cls, v: str) -> Optional[str]:
         if v:
             assert isinstance(v, str)
@@ -89,7 +89,7 @@ class CustomerStrategyRef(BaseResource):
         )
 
     # noinspection PyMethodParameters
-    @validator("customer_strategy_ref", pre=True)
+    @field_validator("customer_strategy_ref", mode="before")
     def validate_customer_strategy_ref(cls, v: str) -> str:
         if v:
             assert isinstance(v, str)
@@ -238,7 +238,7 @@ class ActiveSelection(BaseResource):
     # waiting on fixture_id: int
 
     # noinspection PyMethodParameters
-    @validator("ut", pre=True)
+    @field_validator("ut", mode="before")
     def date_parser(cls, v):
         if isinstance(v, str):
             return datetime.fromisoformat(v)
@@ -274,7 +274,7 @@ class ActiveFixture(BaseResource):
         )
 
     # noinspection PyMethodParameters
-    @validator("start_date", pre=True)
+    @field_validator("start_date", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)
@@ -309,7 +309,7 @@ class BetRequest(BaseResource):
     lockable: bool
 
     # noinspection PyMethodParameters
-    @validator("price", pre=True)
+    @field_validator("price", mode="before")
     def price_parser(cls, v) -> Price:
         if isinstance(v, dict):
             return Price(
@@ -321,7 +321,7 @@ class BetRequest(BaseResource):
             raise TypeError(f"Expected value of dict")
 
     # noinspection PyMethodParameters
-    @validator("start_time_utc", pre=True)
+    @field_validator("start_time_utc", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)
@@ -343,7 +343,7 @@ class BetRequestCreate(BaseResource):
     debit_commission: float
 
     # noinspection PyMethodParameters
-    @validator("created", pre=True)
+    @field_validator("created", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)
@@ -392,7 +392,7 @@ class BetHistory(BaseResource):
     stake: float
 
     # noinspection PyMethodParameters
-    @validator("create_at", "fixture_start_date", pre=True)
+    @field_validator("create_at", "fixture_start_date", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)
@@ -441,7 +441,7 @@ class MyActiveBet(BaseResource):
     sub_account_id: Optional[str] = Field(default=None)  # TODO check type
 
     # noinspection PyMethodParameters
-    @validator("actioned_at", "fixture_start_date", pre=True)
+    @field_validator("actioned_at", "fixture_start_date", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)
@@ -451,19 +451,19 @@ class MyActiveBet(BaseResource):
             raise TypeError(f"Expected value of type str or datetime")
 
     # noinspection PyMethodParameters
-    @validator("customer_order_ref", pre=True)
+    @field_validator("customer_order_ref", mode="before")
     def parse_customer_order_ref(cls, v) -> Optional[CustomerOrderRef]:
         if v:
             return CustomerOrderRef(customer_order_ref=v)
 
     # noinspection PyMethodParameters
-    @validator("customer_strategy_ref", pre=True)
+    @field_validator("customer_strategy_ref", mode="before")
     def parse_customer_strategy_ref(cls, v) -> Optional[CustomerStrategyRef]:
         if v:
             return CustomerStrategyRef(customer_strategy_ref=v)
 
     # noinspection PyMethodParameters
-    @validator("price", pre=True)
+    @field_validator("price", mode="before")
     def price_parser(cls, v) -> Price:
         if isinstance(v, dict):
             return Price(
@@ -511,7 +511,7 @@ class MyActiveLayBet(BaseResource):
     sub_account_id: Optional[str] = Field(default=None)  # TODO check type
 
     # noinspection PyMethodParameters
-    @validator("actioned_at", "fixture_start_date", pre=True)
+    @field_validator("actioned_at", "fixture_start_date", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)
@@ -521,19 +521,19 @@ class MyActiveLayBet(BaseResource):
             raise TypeError(f"Expected value of type str or datetime")
 
     # noinspection PyMethodParameters
-    @validator("customer_order_ref", pre=True)
+    @field_validator("customer_order_ref", mode="before")
     def parse_customer_order_ref(cls, v) -> Optional[CustomerOrderRef]:
         if v:
             return CustomerOrderRef(customer_order_ref=v)
 
     # noinspection PyMethodParameters
-    @validator("customer_strategy_ref", pre=True)
+    @field_validator("customer_strategy_ref", mode="before")
     def parse_customer_strategy_ref(cls, v) -> Optional[CustomerStrategyRef]:
         if v:
             return CustomerStrategyRef(customer_strategy_ref=v)
 
     # noinspection PyMethodParameters
-    @validator("price", pre=True)
+    @field_validator("price", mode="before")
     def price_parser(cls, v) -> Price:
         if isinstance(v, dict):
             return Price(
@@ -599,19 +599,19 @@ class ActiveBet(BaseResource):
     status_name: str
 
     # noinspection PyMethodParameters
-    @validator("customer_order_ref", pre=True)
+    @field_validator("customer_order_ref", mode="before")
     def parse_customer_order_ref(cls, v) -> Optional[CustomerOrderRef]:
         if v:
             return CustomerOrderRef(customer_order_ref=v)
 
     # noinspection PyMethodParameters
-    @validator("customer_strategy_ref", pre=True)
+    @field_validator("customer_strategy_ref", mode="before")
     def parse_customer_strategy_ref(cls, v) -> Optional[CustomerStrategyRef]:
         if v:
             return CustomerStrategyRef(customer_strategy_ref=v)
 
     # noinspection PyMethodParameters
-    @validator("created_at", "fixture_start_date", pre=True)
+    @field_validator("created_at", "fixture_start_date", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)
@@ -658,7 +658,7 @@ class SelectionsForMarket(BaseResource):
     outcome: Optional[str] = Field(default=None)
 
     # noinspection PyMethodParameters
-    @validator("ut", pre=True)
+    @field_validator("ut", mode="before")
     def date_parser(cls, v) -> datetime:
         if isinstance(v, str):
             return datetime.fromisoformat(v)
