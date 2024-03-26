@@ -1,11 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class BaseResource(BaseModel):
-    class Config:
-        populate_by_name = True
-        frozen = False
-        allow = "allow"  # TODO should this be extra = 'allow'
+    model_config = ConfigDict(
+        populate_by_name=True,
+        frozen=False,
+        extra="allow",
+    )
 
     @property
     def info(self):

@@ -1,5 +1,5 @@
 from .baseresource import BaseResource
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from typing import Union, List, Optional
 import logging
 from betconnect import resources
@@ -31,7 +31,7 @@ class GetBetRequestFilter(Filter):
     bet_request_id: Optional[UUID] = Field(default=None)
 
     # noinspection PyMethodParameters
-    @validator("min_odds", pre=True)
+    @field_validator("min_odds", mode="before")
     def validate_min_odds(cls, v: Optional[float]) -> Union[float, None]:
         if v:
             if v < 1.01:
@@ -39,7 +39,7 @@ class GetBetRequestFilter(Filter):
         return v
 
     # noinspection PyMethodParameters
-    @validator("bet_request_id", pre=True)
+    @field_validator("bet_request_id", mode="before")
     def validate_bet_request_id(cls, v: Union[UUID, Optional[str]]) -> Optional[UUID]:
         if isinstance(v, UUID):
             return v
@@ -66,9 +66,9 @@ class CreateBetRequestBySelectionFilter(Filter):
     customer_order_ref: Optional[resources.CustomerOrderRef] = Field(default=None)
 
     # inherited size validator
-    _size = validator("stake", allow_reuse=True)(Filter.validate_stake)
+    _size = field_validator("stake")(Filter.validate_stake)
 
-    @validator("customer_strategy_ref", pre=True)
+    @field_validator("customer_strategy_ref", mode="before")
     def parse_customer_strategy_ref(
         cls, v: Union[str, resources.CustomerStrategyRef]
     ) -> resources.CustomerStrategyRef:
@@ -78,7 +78,7 @@ class CreateBetRequestBySelectionFilter(Filter):
             customer_strategy_ref=v
         )
 
-    @validator("customer_order_ref", pre=True)
+    @field_validator("customer_order_ref", mode="before")
     def parse_customer_order_ref(
         cls, v: Union[str, resources.CustomerOrderRef]
     ) -> resources.CustomerOrderRef:
@@ -114,9 +114,9 @@ class CreateBetRequestByCompetitorFilter(Filter):
     customer_order_ref: Optional[resources.CustomerOrderRef] = Field(default=None)
 
     # inherited size validator
-    _size = validator("stake", allow_reuse=True)(Filter.validate_stake)
+    _size = field_validator("stake")(Filter.validate_stake)
 
-    @validator("customer_strategy_ref", pre=True)
+    @field_validator("customer_strategy_ref", mode="before")
     def parse_customer_strategy_ref(
         cls, v: Union[str, resources.CustomerStrategyRef]
     ) -> resources.CustomerStrategyRef:
@@ -126,7 +126,7 @@ class CreateBetRequestByCompetitorFilter(Filter):
             customer_strategy_ref=v
         )
 
-    @validator("customer_order_ref", pre=True)
+    @field_validator("customer_order_ref", mode="before")
     def parse_customer_order_ref(
         cls, v: Union[str, resources.CustomerOrderRef]
     ) -> resources.CustomerOrderRef:

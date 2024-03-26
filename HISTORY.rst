@@ -3,6 +3,11 @@
 Release History
 ---------------
 
+0.2.1 (26-03-2023)
++++++++++++++++++++
+**Improvements**
+- Further depreciation fixes
+
 0.2.0 (15-03-2023)
 +++++++++++++++++++
 **Improvements**
