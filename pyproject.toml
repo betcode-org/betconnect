@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "betconnect"
+description = "betconnect wrapper"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.9"
+authors = [
+    { name = "Oliver Varney", email = "oliverashleyvarney@gmail.com" },
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "pydantic==2.12.3",
+    "requests<2.33.0",
+    "python-decouple==3.8",
+]
+
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = [
+    "black==22.6.0",
+    "pytest",
+    "pytest-mock",
+    "mkdocs",
+    "mkdocs-material",
+    "build",
+    "twine",
+]
+
+[project.urls]
+Homepage = "https://github.com/betcode-org"
+
+[tool.hatch.version]
+path = "betconnect/__version__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/betconnect",
+    "/HISTORY.rst",
+    "/README.md",
+    "/tests",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
