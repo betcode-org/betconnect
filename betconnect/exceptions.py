@@ -4,7 +4,6 @@ from betconnect import config
 
 
 class BetConnectException(Exception):
-
     """
     base exception class
 

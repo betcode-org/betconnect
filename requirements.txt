@@ -1,3 +1,16 @@
-pydantic==2.6.4
+pydantic==2.12.3
 requests<2.33.0
 python-decouple==3.8
+
+# Tests & Linting
+black==25.1.0
+pytest
+pytest-mock
+
+# Documentation
+mkdocs
+mkdocs-material
+
+# Packaging
+build
+twine

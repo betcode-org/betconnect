@@ -628,7 +628,7 @@ def mock_token_resource() -> resources.Token:
 
 @pytest.fixture()
 def mock_account_preferences_resource(
-    mock_get_user_preferences_response_response: Tuple[Response, Dict[str, Any], float]
+    mock_get_user_preferences_response_response: Tuple[Response, Dict[str, Any], float],
 ) -> resources.AccountPreferences:
     return resources.AccountPreferences(
         **mock_get_user_preferences_response_response[1]["data"]
@@ -659,7 +659,7 @@ def mock_get_balance_response(
 
 @pytest.fixture()
 def mock_balance_resource(
-    mock_get_balance_response: Tuple[Response, Dict[str, Any], float]
+    mock_get_balance_response: Tuple[Response, Dict[str, Any], float],
 ) -> resources.Balance:
     return resources.Balance(**mock_get_balance_response[1]["data"])
 

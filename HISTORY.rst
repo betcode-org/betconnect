@@ -3,6 +3,16 @@
 Release History
 ---------------
 
+0.2.3 (30-10-2025)
++++++++++++++++++++
+
+**Libraries**
+
+- Remove python 3.8
+- Add python 3.12, 3.13 and 3.14
+- pydantic upgraded to 2.12.3
+- black upgraded to 25.1.0
+
 0.2.2 (10-01-2025)
 +++++++++++++++++++
 
