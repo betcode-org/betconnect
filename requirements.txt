@@ -1,4 +1,4 @@
-pydantic==2.12.3
+pydantic==2.12.4
 requests<2.33.0
 python-decouple==3.8
 
