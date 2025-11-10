@@ -31,7 +31,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
-    "black==25.1.0",
+    "black==25.11.0",
     "pytest",
     "pytest-mock",
     "mkdocs",
