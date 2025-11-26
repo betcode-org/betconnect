@@ -22,7 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "pydantic==2.12.3",
+    "pydantic==2.12.5",
     "requests<2.33.0",
     "python-decouple==3.8",
 ]
