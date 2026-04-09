@@ -15,8 +15,6 @@ from .betting import (
     BetHistory,
     BetHistoryRequest,
     SelectionsForMarket,
-    ActiveBet,
-    ActiveBetRequests,
     Viewed,
     BetRequestMatchMore,
     PricesBookmaker,

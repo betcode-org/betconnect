@@ -196,7 +196,7 @@ class Betting(BaseEndpoint):
         """
         Gets a bet request for the given filter.
 
-        This is other users bet requests (please use get_active_bet_requests / my_bets ) to get your own.
+        This is other users bet requests (please use my_bets to get your own).
 
         :param request_filter: A bet request filter, either enter a bet request id or other filter values
         :return: A bet BetRequest resource or an BaseRequestException when BetConnect detects an issue.
@@ -365,39 +365,6 @@ class Betting(BaseEndpoint):
             elapsed_time=elapsed_time,
         )
 
-    def get_active_bet_requests(
-        self, limit: int = None, page: int = None
-    ) -> Union[resources.ActiveBetRequests, resources.BaseRequestException]:
-        """
-        Gets active bet requests, taking into account pagination
-        :param limit: Limit the number of active bets returned
-        :param page: The page starting number
-        :return: A ActiveBetRequests resource or an BaseRequestException when BetConnect detects an issue.
-        """
-        if (page is not None) or (limit is not None):
-            limit = (
-                max(limit, self.client.minimum_limit_value)
-                if limit
-                else self.client.minimum_limit_value
-            )
-            page = (
-                max(page, self.client.page_start_value)
-                if page
-                else self.client.page_start_value
-            )
-
-        (response, response_json, elapsed_time) = self._request(
-            method_uri=f"{self.api_version}/get_active_bet_requests{f'/{limit}/{page}' if page is not None else ''}",
-            authenticated=True,
-        )
-
-        return self.process_response(
-            response=response,
-            response_json=response_json,
-            resource=resources.ActiveBetRequests,
-            elapsed_time=elapsed_time,
-        )
-
     def prices(
         self,
         fixture_id: int,
@@ -512,53 +479,40 @@ class Betting(BaseEndpoint):
         :param customer_strategy_ref: The customer strategy ref which has been attached to any bet requests
         :return: A MyBetsBetRequests resource or an BaseRequestException when BetConnect detects an issue.
         """
-
-        if user_id is None:
-            if self.client.user_id:
-                user_id = self.client.user_id
-            else:
-                logger.debug(
-                    f"Trying to get your user preferences as no user_id was supplied!"
-                )
-                self.client.account.get_user_preferences()
-                if self.client.user_id:
-                    user_id = self.client.user_id
-                else:
-                    raise exceptions.MissingUserPerferences()
-
-        uri_extension = ""
-
-        if (
-            (page is not None)
-            or (limit is not None)
-            or (get_all is not None)
-            or (customer_strategy_ref is not None)
-        ):
-
+        if (page is not None) or (limit is not None):
             limit = (
                 max(limit, self.client.minimum_limit_value)
-                if limit is not None
+                if limit
                 else self.client.minimum_limit_value
             )
             page = (
                 max(page, self.client.page_start_value)
-                if page is not None
+                if page
                 else self.client.page_start_value
             )
-            get_all = "get_all"
 
-            uri_extension += f"/{limit}/{page}/{get_all}"
+        if not user_id:
+            if self.client.user_preferences:
+                user_id = self.client.user_preferences.user_id
 
-            uri_extension += (
-                f"/{customer_strategy_ref}" if customer_strategy_ref else ""
+        if get_all:
+            (response, response_json, elapsed_time) = self._request(
+                method_uri=f"{self.api_version}/my_bets/{str(side.value)}/{user_id}/{str(status.value)}{f'/{limit}/{page}'if page is not None else ''}/{get_all}{f'/{customer_strategy_ref}'if customer_strategy_ref is not None else ''}",
+                authenticated=True,
             )
+        else:
+            if customer_strategy_ref:
+                (response, response_json, elapsed_time) = self._request(
+                    method_uri=f"{self.api_version}/my_bets/{str(side.value)}/{user_id}/{str(status.value)}{f'/{limit}/{page}'if page is not None else ''}/get_only/{customer_strategy_ref}",
+                    authenticated=True,
+                )
+            else:
+                (response, response_json, elapsed_time) = self._request(
+                    method_uri=f"{self.api_version}/my_bets/{str(side.value)}/{user_id}/{str(status.value)}{f'/{limit}/{page}'if page is not None else ''}",
+                    authenticated=True,
+                )
 
-        (response, response_json, elapsed_time) = self._request(
-            method_uri=f"{self.api_version}/my_bets/{side.value}/{user_id}/{str(status.value)}{uri_extension}",
-            authenticated=True,
-        )
-
-        if side.value == "back":
+        if str(side.value).upper() == "BACK":
             return self.process_response(
                 response=response,
                 response_json=response_json,
@@ -573,30 +527,12 @@ class Betting(BaseEndpoint):
                 elapsed_time=elapsed_time,
             )
 
-    def lock_bet(
-        self, bet_request_id: UUID, bet_status_id: int, allocated_stake: int
-    ) -> Union[resources.LockBet, resources.BaseRequestException]:
+    def lock_bet(self, bet_request_id: UUID, amount: int, seconds: int):
         """
-        Matched betting premium product only. Premuim subscription required.
-        client.account_preferences.is_premium_subscriber ==1.
+        Not Yet Implemented: Locks a bet for a set amount of seconds for a set amount
         :param bet_request_id: The bet request ID
-        :param bet_status_id: The status ID of the bet
-        :param allocated_stake:
-        :return: LockBet
+        :param amount: the amount
+        :param seconds: the seconds to lock the bet
+        :return: A Lock bet resource
         """
-        raise NotImplementedError
-
-        (response, response_json, elapsed_time) = self._put(
-            method_uri=f"{self.api_version}/lock_bet",
-            data={
-                "bet_request_id": str(bet_request_id),
-                "bet_status_id": bet_status_id,
-                "allocated_stake": allocated_stake,
-            },
-        )
-        return self.process_response(
-            response=response,
-            response_json=response_json,
-            resource=resources.LockBet,
-            elapsed_time=elapsed_time,
-        )
+        raise NotImplementedError()
