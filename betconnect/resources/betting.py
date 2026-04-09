@@ -575,122 +575,84 @@ class MyBetsBets(BaseResource):
         return f"Bets Active: {self.bets_active}"
 
 
-class ActiveBet(BaseResource):
-    bet_request_id: UUID
-    bet_type_name: Optional[str] = Field(default=None)
-    competition_name: str
-    created_at: datetime
-    customer_order_ref: Optional[CustomerOrderRef] = Field(default=None)
-    customer_strategy_ref: Optional[CustomerStrategyRef] = Field(default=None)
-    each_way_factor: Optional[float] = Field(default=None)
-    fill_percentage: float
-    fixture_id: Optional[int] = Field(default=None)
-    fixture_name: str
-    fixture_start_date: datetime = Field(alias="fixture_startdate")
-    handicap: Optional[float] = Field(default=None)
-    market_name: str
-    matched_stake: float
-    price: float
-    price_denominator: int
-    price_numerator: int
-    selection_name: str
-    sport_name: str
-    stake: float
-    status_name: str
-
-    # noinspection PyMethodParameters
-    @field_validator("customer_order_ref", mode="before")
-    def parse_customer_order_ref(cls, v) -> Optional[CustomerOrderRef]:
-        if v:
-            return CustomerOrderRef(customer_order_ref=v)
-
-    # noinspection PyMethodParameters
-    @field_validator("customer_strategy_ref", mode="before")
-    def parse_customer_strategy_ref(cls, v) -> Optional[CustomerStrategyRef]:
-        if v:
-            return CustomerStrategyRef(customer_strategy_ref=v)
-
-    # noinspection PyMethodParameters
-    @field_validator("created_at", "fixture_start_date", mode="before")
-    def date_parser(cls, v) -> datetime:
-        if isinstance(v, str):
-            return datetime.fromisoformat(v)
-        elif isinstance(v, datetime):
-            return v
-        else:
-            raise TypeError(f"Expected value of type str or datetime")
-
-    def __repr__(self) -> str:
-        return f"Bet: {str(self.bet_request_id)}, Competition: {self.competition_name}, Selection: {self.selection_name}, Price: {self.price}, Stake: {self.stake}"
-
-
-class ActiveBetRequests(BaseResource):
-    bets: List[ActiveBet]
-    bets_active: int
-    last_page: int
-    total_bets: int
-
-    def __repr__(self) -> str:
-        return f"Bets Active: {self.bets_active}"
-
-
-class BetHistoryRequest(BaseResource):
-    bets: List[BetHistory]
-    last_page: int
-    total_bets: int
-
-    def __repr__(self) -> str:
-        return f"Bets #: {len(self.bets)}"
-
-
-class SelectionsForMarket(BaseResource):
-    source_fixture_id: str
-    source_market_id: str
-    source_market_type_id: str
-    source_selection_id: str
-    trading_status: str
-    name: str
-    competitor_id: Optional[str] = Field(default=None)
-    ut: datetime
-    order: Optional[int] = Field(default=None)
-    max_price: Optional[float] = Field(default=None)
-    prices: List[Price]
-    outcome: Optional[str] = Field(default=None)
-
-    # noinspection PyMethodParameters
-    @field_validator("ut", mode="before")
-    def date_parser(cls, v) -> datetime:
-        if isinstance(v, str):
-            return datetime.fromisoformat(v)
-        elif isinstance(v, datetime):
-            return v
-        else:
-            raise TypeError(f"Expected value of type str or datetime")
-
-
-class LineMarketsSelectionsForMarket(BaseResource):
-    name: str
-    display_name: str
-    handicap: str
-    line_data: List[SelectionsForMarket]
-
-
-class Viewed(BaseResource):
-    prev: UUID
-    next: UUID
-
-    def __repr__(self) -> str:
-        return f"Prev: {self.prev}->Next: {self.next}"
-
-
 class BetRequestMatchMore(BaseResource):
-    matched: bool
+    accepted: bool
+    amount_matched: Optional[float] = Field(default=None)
     available: bool
-    viewed: Viewed
+    bet_id: Optional[str] = Field(default=None)
+    bet_request_id: UUID
+    bet_status: Optional[str] = Field(default=None)
+    liability_increase: float
+    matched: bool
+    potential_bet_request_id: Optional[str] = Field(default=None)
+    request_matches: List[dict] = Field(default=[])
 
     def __repr__(self) -> str:
         return f"Matched: {self.matched}, Available: {self.available}"
 
 
+class BetHistoryRequest(BaseResource):
+    bets: List[BetHistory]
+    bets_settled: int
+    last_page: int
+    total_bets: int
+
+    def __repr__(self) -> str:
+        return f"Bets Settled: {self.bets_settled}"
+
+
+class SelectionsForMarket(BaseResource):
+    name: str
+    competitor: str
+    prices: List[Price]
+
+    def __repr__(self) -> str:
+        return f"Selection: {self.name}, Prices #:{len(self.prices)}"
+
+
+class LineMarketsSelectionsForMarket(BaseResource):
+    name: str
+    competitor: str
+    line: float
+    prices: List[Price]
+
+    def __repr__(self) -> str:
+        return f"Selection: {self.name}, Line: {self.line}, Prices #:{len(self.prices)}"
+
+
+class Viewed(BaseResource):
+    bet_request_id: UUID
+    bet_type_name: Optional[str] = Field(default=None)
+    competition_name: str
+    fixture_name: str
+    liability: float
+    market_name: str
+    price: float
+    price_denominator: int
+    price_numerator: int
+    requested_stake: float
+    selection_name: str
+    sport_name: str
+    start_time_utc: datetime
+
+    # noinspection PyMethodParameters
+    @field_validator("start_time_utc", mode="before")
+    def date_parser(cls, v) -> datetime:
+        if isinstance(v, str):
+            return datetime.fromisoformat(v)
+        elif isinstance(v, datetime):
+            return v
+        else:
+            raise TypeError(f"Expected value of type str or datetime")
+
+    def __repr__(self) -> str:
+        return f"Bet: {str(self.bet_request_id)}, Competition: {self.competition_name}, Selection: {self.selection_name},Price: {self.price}, Stake: {self.requested_stake}"
+
+
 class LockBet(BaseResource):
-    pass
+    bet_request_id: UUID
+    amount_locked: float
+    seconds_locked: int
+
+    def __repr__(self) -> str:
+        return f"Bet: {str(self.bet_request_id)}, Amount Locked: {self.amount_locked}, Seconds: {self.seconds_locked}"

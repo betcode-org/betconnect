@@ -360,22 +360,6 @@ class TestBetting:
         assert isinstance(bet_request_stop, resources.ResponseMessage)
         request.assert_called()
 
-    def test_get_active_bet_requests(
-        self,
-        mocker: MockerFixture,
-        mock_betting_endpoint: Betting,
-        mock_bet_get_active_bet_requests_response: Tuple[
-            Response, Dict[str, Any], float
-        ],
-    ):
-        request = mocker.patch(
-            "betconnect.endpoints.baseendpoint.BaseEndpoint._request",
-            return_value=mock_bet_get_active_bet_requests_response,
-        )
-        active_bets = mock_betting_endpoint.get_active_bet_requests()
-        assert isinstance(active_bets, resources.ActiveBetRequests)
-        request.assert_called()
-
     def test_get_viewed_next_page(
         self,
         mocker: MockerFixture,
